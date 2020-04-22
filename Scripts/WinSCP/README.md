@@ -4,9 +4,9 @@ The PowerShell script `Sync-WinSCPDirectory.ps1` syncronizes a remote folder (FT
 
 Please note that this script is distributed AS IS with the intention to be useful for developers that wants to interact with WinSCP API.
 
-This script is extremely slow to compare local and remote files into remote folders (FTP) that contains a lot of files. It should should be rewritten to use [[https://winscp.net/forum/viewtopic.php?t=14392|ListDirectory]] approach into a recursively form, so it compares all files from a folder at once, instead of comparing each individual file.
+This script is extremely slow to compare local and remote files into remote folders (FTP) that contains a lot of files. It should should be rewritten to use [ListDirectory](https://winscp.net/forum/viewtopic.php?t=14392) approach into a recursively form, so it compares all files from a folder at once, instead of comparing each individual file.
 
-Instead of using this script, I recommend using the WGET approach as described at [[https://www.dokuwiki.org/tips:backup_script|DokuWiki Backup]] page instead of this script.
+Instead of using this script, I recommend using the WGET approach as described at [DokuWiki Backup](https://www.dokuwiki.org/tips:backup_script) page instead of this script.
 
 # Parameters
 
@@ -26,9 +26,7 @@ Instead of using this script, I recommend using the WGET approach as described a
 
 # Example
 
-``
-powershell -ExecutionPolicy Bypass -File C:\Users\hp\Documents\GitHub\ScriptUtil\Scripts\WinSCP\Sync-WinSCPDirectory.ps1 -sessionUrl sftp://user:mypassword;fingerprint=ssh-rsa-xxxxxxxxxxx...=@example.com/ -remotePath /home/user/public_html/ -localPath C:\xampp\htdocs -sessionLogPath "%temp%\session.log" -syncLogPath "%temp%\Sync-WinSCPDirectory_public_html.log" -delete
-``
+    powershell -ExecutionPolicy Bypass -File C:\Users\hp\Documents\GitHub\ScriptUtil\Scripts\WinSCP\Sync-WinSCPDirectory.ps1 -sessionUrl sftp://user:mypassword;fingerprint=ssh-rsa-xxxxxxxxxxx...=@example.com/ -remotePath /home/user/public_html/ -localPath C:\xampp\htdocs -sessionLogPath "%temp%\session.log" -syncLogPath "%temp%\Sync-WinSCPDirectory_public_html.log" -delete
 
 + **-sessionURL**: attempt to connect to ``example.com`` with ``user`` username and ``mypassword`` as password.
 + **-remotePath**: download files recursively from ``/home/user/public_html/`` remote location.
