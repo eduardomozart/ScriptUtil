@@ -17,7 +17,7 @@ Instead of using this script, I recommend using the WGET approach as described a
 | ``-remotePath``     | Specify remote folder (FTP) path.                                             |
 | ``-batches``        | Specify number of concurrent (simultaneous) download from remote folder (FTP) to local folder. |
 | ``-delete``         | Delete files from local folder that doesn't exists into remote folder (FTP).  |
-| ``-beep``           | Beep consoles if there was changes between local and remote folders (files were added/removed into local folder). |
+| ``-beep``           | Beeps console if there was changes between local and remote folders (files were added/removed into local folder). |
 | ``-pause``          | Pause script execution ("Press any key to continue...") when script finishes. |
 | ``-sessionLogPath`` | Specify WinSCP Session logging file location.                                 |
 | ``-syncLogPath``    | Specify script logging file location.                                         |
