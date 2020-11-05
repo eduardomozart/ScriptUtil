@@ -56,6 +56,8 @@ Option Explicit
 Dim Force, Verbose
 Dim Setup, SetupArchitecture, SetupLocation, SetupOptions, SetupVersion
 
+GetUAC()
+
 '
 '
 ' USER SETTINGS
@@ -375,8 +377,30 @@ Function DeployFIServerCACert()
 	
 	strScriptPath = Left(WScript.ScriptFullName,(Len(WScript.ScriptFullName) - (Len(WScript.ScriptName) + 1)))
 	objFSO.CopyFile objFSO.BuildPath(objFSO.BuildPath(strScriptPath, "certs"), "cacert.pem"), objFSO.BuildPath(strLocalCACertDir, "cacert.pem"), bOverwrite
+	
+	DeployFIServerCACert = objFSO.BuildPath(strLocalCACertDir, "cacert.pem")
+End Function
+			
+Function GetUAC()
+	Dim iRet, AKeys
+	Dim i
+	
+	Const HKEY_USERS = &H80000003
 
-	DeployServerCACert = objFSO.BuildPath(strLocalCACertDir, "cacert.pem")
+	Dim Reg : Set Reg = GetObject("winMgMts:StdRegProv")
+	iRet = Reg.EnumKey(HKEY_USERS, "S-1-5-19", AKeys)
+
+	' ////////////////////
+
+	ReDim arr(WScript.Arguments.Count-1)
+	'For i = 1 To WScript.Arguments.Count-1: arr(i) = WScript.Arguments(i): Next
+	For i = 0 To WScript.Arguments.Count-1: arr(i) = WScript.Arguments(i): Next
+
+	If iRet <> 0 Then
+		Dim UAC : Set UAC = CreateObject("Shell.Application")
+		UAC.ShellExecute WScript.FullName, Chr(34) & WScript.ScriptFullName & Chr(34) & " " & Join(arr), "", "runas", 1
+		WScript.Quit
+	End If
 End Function
 
 '
