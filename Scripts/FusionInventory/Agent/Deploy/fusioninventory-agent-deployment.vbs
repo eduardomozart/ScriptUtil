@@ -86,8 +86,8 @@ SetupVersion = "2.5.2"
 ' Location for Release Candidates
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
-SetupLocation = "\\sulcromo.com.br\NETLOGON\FusionInventory-Agent"
-RemoveCIFSOpenFileSecurityWarning("sulcromo.com.br")
+SetupLocation = "\\ad.example.com\NETLOGON\FusionInventory-Agent"
+RemoveCIFSOpenFileSecurityWarning("ad.example.com")
 
 ' SetupArchitecture
 '    The setup architecture can be 'x86', 'x64' or 'Auto'
@@ -103,7 +103,7 @@ SetupArchitecture = "Auto"
 '    You should use simple quotes (') to set between quotation marks those values
 '    that require it; double quotes (") doesn't work with UNCs.
 '
-SetupOptions = "/acceptlicense /runnow /server='https://glpi.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
+SetupOptions = "/acceptlicense /runnow /server='https://glpi.ad.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
