@@ -87,7 +87,7 @@ SetupVersion = "2.5.2"
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
 SetupLocation = "\\sulcromo.com.br\NETLOGON\FusionInventory-Agent"
-RemoveOpenFileSecurityWarning("sulcromo.com.br")
+RemoveCIFSOpenFileSecurityWarning("sulcromo.com.br")
 
 ' SetupArchitecture
 '    The setup architecture can be 'x86', 'x64' or 'Auto'
@@ -103,7 +103,7 @@ SetupArchitecture = "Auto"
 '    You should use simple quotes (') to set between quotation marks those values
 '    that require it; double quotes (") doesn't work with UNCs.
 '
-SetupOptions = "/acceptlicense /runnow /server='https://glpi.sulcromo.com.br/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployCACert() & "' /S"
+SetupOptions = "/acceptlicense /runnow /server='https://glpi.sulcromo.com.br/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
@@ -343,7 +343,7 @@ Function ShowMessage(strMessage)
    End If
 End Function
 
-Function RemoveOpenFileSecurityWarning(strDomain)
+Function RemoveCIFSOpenFileSecurityWarning(strDomain)
 	Dim strComputer, objReg, strKeyPath, strValueName, dwValue
 	
 	Const HKEY_CURRENT_USER = &H80000001
@@ -361,7 +361,7 @@ Function RemoveOpenFileSecurityWarning(strDomain)
 	objReg.SetDWORDValue HKEY_CURRENT_USER,strKeyPath,strValueName,dwValue
 End Function
 
-Function DeployCACert()
+Function DeployFIServerCACert()
 	Dim objFSO, bOverwrite, strLocalCACertDir, strScriptPath
 	
 	Set objFSO = CreateObject("Scripting.FileSystemObject")
@@ -376,7 +376,7 @@ Function DeployCACert()
 	strScriptPath = Left(WScript.ScriptFullName,(Len(WScript.ScriptFullName) - (Len(WScript.ScriptName) + 1)))
 	objFSO.CopyFile objFSO.BuildPath(objFSO.BuildPath(strScriptPath, "certs"), "cacert.pem"), objFSO.BuildPath(strLocalCACertDir, "cacert.pem"), bOverwrite
 
-	DeployCACert = objFSO.BuildPath(strLocalCACertDir, "cacert.pem")
+	DeployServerCACert = objFSO.BuildPath(strLocalCACertDir, "cacert.pem")
 End Function
 
 '
