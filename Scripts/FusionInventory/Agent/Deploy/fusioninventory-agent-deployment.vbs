@@ -103,7 +103,7 @@ SetupArchitecture = "Auto"
 '    You should use simple quotes (') to set between quotation marks those values
 '    that require it; double quotes (") doesn't work with UNCs.
 '
-SetupOptions = "/acceptlicense /runnow /server='https://glpi.sulcromo.com.br/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
+SetupOptions = "/acceptlicense /runnow /server='https://glpi.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
