@@ -1,6 +1,6 @@
 # RunExe
 
-Script to run MAPI executable at logon via GPO by [Andrei Ghita](https://developermessaging.azurewebsites.net/2016/02/08/script-to-run-mapi-executable-at-logon-via-gpo/). I only added the line 43 so the script ``cmd`` is executed only if Outlook is installed.
+Script to run MAPI executable at logon via GPO by [Andrei Ghita](https://developermessaging.azurewebsites.net/2016/02/08/script-to-run-mapi-executable-at-logon-via-gpo/). I modified the original script so the ``EXE_NAME`` is executed only if Outlook is installed and an Outlook profile exists.
 
 ## Description
 
