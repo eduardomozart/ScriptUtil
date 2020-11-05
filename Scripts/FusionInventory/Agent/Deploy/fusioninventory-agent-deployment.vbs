@@ -372,7 +372,7 @@ Function DeployFIServerCACert()
 	strLocalCACertDir = CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%"), "FusionInventory-Agent"), "certs")
 	
 	If Not objFSO.FolderExists(strLocalCACertDir) Then
-		objFSO.CreateFolder(strLocalCACertDir)
+		CreateDirs(strLocalCACertDir)
 	End If
 	
 	strScriptPath = Left(WScript.ScriptFullName,(Len(WScript.ScriptFullName) - (Len(WScript.ScriptName) + 1)))
@@ -402,6 +402,52 @@ Function GetUAC()
 		WScript.Quit
 	End If
 End Function
+			
+Sub CreateDirs( MyDirName )
+' This subroutine creates multiple folders like CMD.EXE's internal MD command.
+' By default VBScript can only create one level of folders at a time (blows
+' up otherwise!).
+'
+' Argument:
+' MyDirName   [string]   folder(s) to be created, single or
+'                        multi level, absolute or relative,
+'                        "d:\folder\subfolder" format or UNC
+'
+' Written by Todd Reeves
+' Modified by Rob van der Woude
+' http://www.robvanderwoude.com
+
+    Dim arrDirs, i, idxFirst, objFSO, strDir, strDirBuild
+
+    ' Create a file system object
+    Set objFSO = CreateObject( "Scripting.FileSystemObject" )
+
+    ' Convert relative to absolute path
+    strDir = objFSO.GetAbsolutePathName( MyDirName )
+
+    ' Split a multi level path in its "components"
+    arrDirs = Split( strDir, "\" )
+
+    ' Check if the absolute path is UNC or not
+    If Left( strDir, 2 ) = "\\" Then
+        strDirBuild = "\\" & arrDirs(2) & "\" & arrDirs(3) & "\"
+        idxFirst    = 4
+    Else
+        strDirBuild = arrDirs(0) & "\"
+        idxFirst    = 1
+    End If
+
+    ' Check each (sub)folder and create it if it doesn't exist
+    For i = idxFirst to Ubound( arrDirs )
+        strDirBuild = objFSO.BuildPath( strDirBuild, arrDirs(i) )
+        If Not objFSO.FolderExists( strDirBuild ) Then
+            objFSO.CreateFolder strDirBuild
+        End if
+    Next
+
+    ' Release the file system object
+    Set objFSO= Nothing
+End Sub
 
 '
 '
