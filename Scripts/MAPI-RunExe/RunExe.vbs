@@ -30,6 +30,34 @@ Function GetOutlookBitness
     If (Not IsNull(strValue)) Then
         GetOutlookBitness = strValue
     End If
+	
+    strTempKeyPath = "SOFTWARE\WOW6432Node\Microsoft\Office\" & GetOfficeVersion & "\Outlook"
+    strTempValueName = "Bitness"
+    oReg.GetStringValue HKEY_LOCAL_MACHINE, strTempKeyPath, strTempValueName, strValue
+    If (Not IsNull(strValue)) Then
+        GetOutlookBitness = strValue
+    End If
+End Function
+
+Function CheckOutlookProfile
+	strTempKeyPath = "SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows Messaging Subsystem\Profiles"
+	strTempValueName = "DefaultProfile"
+	oReg.GetStringValue HKEY_LOCAL_MACHINE, strTempKeyPath, strTempValueName, strValue
+	If (Not IsNull(strValue)) Then
+        ' CheckOutlookProfile = strValue
+		CheckOutlookProfile = True
+		Exit Function
+	End If
+	
+    strTempKeyPath = "SOFTWARE\Microsoft\Office\" & GetOfficeVersion & "\Outlook\Profiles"
+	oReg.EnumKey HKEY_CURRENT_USER, strTempKeyPath, arrSubKeys
+	If UBound(arrSubKeys) <> -1 Then
+        ' CheckOutlookProfile = strValue
+		CheckOutlookProfile = True
+		Exit Function
+	End If
+	
+	CheckOutlookProfile = False
 End Function
 
 Set oReg=GetObject("winmgmts:{impersonationLevel=impersonate}!\\.\root\default:StdRegProv")
@@ -39,10 +67,12 @@ If (Not boolRerun) then
     oReg.GetDWORDValue HKEY_CURRENT_USER, strKeyPath, strValueName, strValue
 End if
 If ((IsNull(strValue)) or (strValue = 0)) Then
-    strBitness = GetOutlookBitness
-    If (strBitness <> "") Then
+    bOutlookProfile = CheckOutlookProfile
+	strBitness = GetOutlookBitness
+    If ((bOutlookProfile) And (strBitness <> "")) Then
         cmd = strDirectory & "\" & strBitness & "\" & strExeName & " " & strArguments
         Set oShell = CreateObject("WScript.Shell")
+		WScript.Echo cmd
         oShell.Run cmd
         If (Not boolRerun) then
             oReg.SetDWORDValue HKEY_CURRENT_USER, strKeyPath, strValueName, 1
