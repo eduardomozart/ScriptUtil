@@ -115,7 +115,7 @@ Setup = "fusioninventory-agent_windows-" & SetupArchitecture & "_" & SetupVersio
 ' Force
 '    Force the installation even whether Setup is previously installed.
 '
-Force = "Yes"
+Force = "No"
 
 ' Verbose
 '    Enable or disable the information messages.
