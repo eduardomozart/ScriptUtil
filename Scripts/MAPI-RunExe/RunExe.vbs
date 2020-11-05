@@ -72,7 +72,6 @@ If ((IsNull(strValue)) or (strValue = 0)) Then
     If ((bOutlookProfile) And (strBitness <> "")) Then
         cmd = strDirectory & "\" & strBitness & "\" & strExeName & " " & strArguments
         Set oShell = CreateObject("WScript.Shell")
-		WScript.Echo cmd
         oShell.Run cmd
         If (Not boolRerun) then
             oReg.SetDWORDValue HKEY_CURRENT_USER, strKeyPath, strValueName, 1
