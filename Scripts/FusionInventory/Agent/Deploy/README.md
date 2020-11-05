@@ -10,3 +10,15 @@ It was modified to add the following features:
 1. Deploy FusionInventory for GLPI (Server) CA cert to the local computador directory ``C:\Program Files\FusionInventory-Agent\certs`` through ``DeployFIServerCACert()`` function.
 1. Added sub procedure ``CreateDirs`` used by ``DeployFIServerCACert()`` function to create the certs folder several levels deep all in one go, if it doesn't exists.
 1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/debug``, ``/installtasks`` and ``/ca-cert-file``.
+
+## Directory Structure
+
+```
+\\AD.EXAMPLE.COM\NETLOGON\FUSIONINVENTORY-AGENT
+│   fusioninventory-agent-deployment.vbs
+│   fusioninventory-agent_windows-x64_2.5.2.exe
+│   fusioninventory-agent_windows-x86_2.5.2.exe
+│
+└───certs
+        cacert.pem
+```
