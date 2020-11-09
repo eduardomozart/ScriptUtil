@@ -9,7 +9,7 @@ It was modified to add the following features:
 1. Remove "Open File Security Warning" to the specified UNC path through ``RemoveCIFSOpenFileWarning()`` function.
 1. Deploy FusionInventory for GLPI (Server) CA cert to the local computador directory ``C:\Program Files\FusionInventory-Agent\certs`` through ``DeployFIServerCACert()`` function.
 1. Added sub procedure ``CreateDirs`` used by ``DeployFIServerCACert()`` function to create the certs folder several levels deep all in one go, if it doesn't exists.
-1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/debug``, ``/installtasks`` and ``/ca-cert-file``.
+1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/debug``, ``/installtasks``, ``/no-p2p`` and ``/ca-cert-file``.
 
 ## Directory Structure
 
