@@ -88,8 +88,8 @@ SetupVersion = "2.5.2"
 ' Location for Release Candidates
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
-SetupLocation = "\\ad.example.com\NETLOGON\FusionInventory-Agent"
-RemoveCIFSOpenFileSecurityWarning("ad.example.com")
+SetupLocation = "\\sulcromo.com.br\NETLOGON\FusionInventory-Agent"
+RemoveCIFSOpenFileSecurityWarning("sulcromo.com.br")
 
 ' SetupArchitecture
 '    The setup architecture can be 'x86', 'x64' or 'Auto'
@@ -105,7 +105,7 @@ SetupArchitecture = "Auto"
 '    You should use simple quotes (') to set between quotation marks those values
 '    that require it; double quotes (") doesn't work with UNCs.
 '
-SetupOptions = "/acceptlicense /runnow /server='https://glpi.ad.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /no-p2p /ca-cert-file='" & DeployFIServerCACert() & "' /S"
+SetupOptions = "/acceptlicense /runnow /server='https://glpi.sulcromo.com.br/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /ca-cert-file='" & DeployFIServerCACert() & "' /S"
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
@@ -346,21 +346,15 @@ Function ShowMessage(strMessage)
 End Function
 
 Function RemoveCIFSOpenFileSecurityWarning(strDomain)
-	Dim strComputer, objReg, strKeyPath, strValueName, dwValue
+	Dim WshShell, strKeyPath, strValueName, dwValue
 	
-	Const HKEY_CURRENT_USER = &H80000001
+	Set WshShell = Wscript.CreateObject("WScript.shell")
 
-	strComputer = "."
-	Set objReg = GetObject("winmgmts:" _
-		& "{impersonationLevel=impersonate}\\" & strComputer & _
-			"\root\default:StdRegProv")
-
-	strKeyPath = "Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
+	strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
 		& "ZoneMap\ESCDomains\" & strDomain
-	objReg.CreateKey HKEY_CURRENT_USER,strKeyPath
 	strValueName = "file"
 	dwValue = 1
-	objReg.SetDWORDValue HKEY_CURRENT_USER,strKeyPath,strValueName,dwValue
+	WshShell.RegWrite strKeyPath & "\" & strValueName, dwValue, "REG_DWORD"
 End Function
 
 Function DeployFIServerCACert()
@@ -370,39 +364,40 @@ Function DeployFIServerCACert()
 	bOverwrite = True
 	
 	strLocalCACertDir = CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%"), "FusionInventory-Agent"), "certs")
-	
+
 	If Not objFSO.FolderExists(strLocalCACertDir) Then
 		CreateDirs(strLocalCACertDir)
 	End If
 	
 	strScriptPath = Left(WScript.ScriptFullName,(Len(WScript.ScriptFullName) - (Len(WScript.ScriptName) + 1)))
 	objFSO.CopyFile objFSO.BuildPath(objFSO.BuildPath(strScriptPath, "certs"), "cacert.pem"), objFSO.BuildPath(strLocalCACertDir, "cacert.pem"), bOverwrite
-	
+
 	DeployFIServerCACert = objFSO.BuildPath(strLocalCACertDir, "cacert.pem")
 End Function
-			
+
 Function GetUAC()
-	Dim iRet, AKeys
+	Dim WshShell, strErrorCode, strSystemRoot
+	Dim iRet
 	Dim i
 	
-	Const HKEY_USERS = &H80000003
-
-	Dim Reg : Set Reg = GetObject("winMgMts:StdRegProv")
-	iRet = Reg.EnumKey(HKEY_USERS, "S-1-5-19", AKeys)
-
+	Set WshShell = Wscript.CreateObject("WScript.shell")
+	
 	' ////////////////////
 
 	ReDim arr(WScript.Arguments.Count-1)
 	'For i = 1 To WScript.Arguments.Count-1: arr(i) = WScript.Arguments(i): Next
 	For i = 0 To WScript.Arguments.Count-1: arr(i) = WScript.Arguments(i): Next
-
-	If iRet <> 0 Then
+	
+	strSystemRoot = WshShell.ExpandEnvironmentStrings( "%SystemRoot%" )
+	strErrorCode = WshShell.Run(Chr(34) & strSystemRoot & "\system32\cacls.exe" & Chr(34) & " " & Chr(34) & strSystemRoot & "\system32\config\system" & Chr(34),0,True)
+	
+    If strErrorCode <> 0 Then
 		Dim UAC : Set UAC = CreateObject("Shell.Application")
 		UAC.ShellExecute WScript.FullName, Chr(34) & WScript.ScriptFullName & Chr(34) & " " & Join(arr), "", "runas", 1
 		WScript.Quit
 	End If
 End Function
-			
+
 Sub CreateDirs( MyDirName )
 ' This subroutine creates multiple folders like CMD.EXE's internal MD command.
 ' By default VBScript can only create one level of folders at a time (blows
@@ -442,7 +437,7 @@ Sub CreateDirs( MyDirName )
         strDirBuild = objFSO.BuildPath( strDirBuild, arrDirs(i) )
         If Not objFSO.FolderExists( strDirBuild ) Then
             objFSO.CreateFolder strDirBuild
-        End if
+        End If
     Next
 
     ' Release the file system object
