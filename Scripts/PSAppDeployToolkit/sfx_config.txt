@@ -1,0 +1,7 @@
+;!@Install@!UTF-8!
+Title="Installation"
+Directory=""
+Progress="no"
+RunProgram="Deploy-Application.exe"
+SelfDelete="0"
+;!@InstallEnd@!
