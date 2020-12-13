@@ -106,6 +106,7 @@ SetupArchitecture = "Auto"
 '    that require it; double quotes (") doesn't work with UNCs.
 '
 SetupOptions = "/acceptlicense /runnow /execmode=service /add-firewall-exception /server='https://glpi.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /no-p2p /ca-cert-file='" & DeployFIServerCACert() & "' /S"
+AddToFirewall CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%") & "\FusionInventory-Agent\FusionInventory-Agent.exe", 62354
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
@@ -363,7 +364,7 @@ Function DeployFIServerCACert()
 	Set objFSO = CreateObject("Scripting.FileSystemObject")
 	bOverwrite = True
 	
-	strLocalCACertDir = CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("Scripting.FileSystemObject").BuildPath(CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%"), "FusionInventory-Agent"), "certs")
+	strLocalCACertDir = objFSO.BuildPath(objFSO.BuildPath(CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%"), "FusionInventory-Agent"), "certs")
 
 	If Not objFSO.FolderExists(strLocalCACertDir) Then
 		CreateDirs(strLocalCACertDir)
@@ -444,6 +445,113 @@ Sub CreateDirs( MyDirName )
     Set objFSO= Nothing
 End Sub
 
+Sub AddToFirewall(strFilePath, intLocalPort)
+Dim objFirewall, objPolicy, objProfile, colApplications, objApplication, blnRule, strOut, fs, ws
+	Set fs = CreateObject("Scripting.FileSystemObject")
+	Set ws = CreateObject("WScript.Shell")
+	Set objFirewall = Nothing
+	On Error Resume Next
+	Set objFirewall = CreateObject("HNetCfg.FwMgr")
+	On Error Goto 0
+	ShowMessage("Adding a firewall rule for """ & fs.GetBaseName(strFilePath) & """ ...")
+	If objFirewall Is Nothing Then
+		ShowMessage(vbTab & "Using netsh.exe")
+		On Error Resume Next
+		strOut = ws.Exec("netsh.exe advfirewall firewall show rule name=""" & fs.GetBaseName(strFilePath) & """").stdout
+		If InStr(strOut, "No rules match") Then
+			If Len(intLocalPort) = 0 Then
+				ws.Run "netsh.exe advfirewall firewall add rule name=""" & fs.GetBaseName(strFilePath) & """ dir=in action=allow program=""" & Replace(strFilePath, """", "") & """", 1, True
+			Else
+				ws.Run "netsh.exe advfirewall firewall add rule name=""FusionInventory Agent"" dir=in action=allow protocol=TCP localport=" & intLocalPort, 1, True
+			End If
+			strOut = ws.Exec("netsh.exe advfirewall firewall show rule name=""" & fs.GetBaseName(strFilePath) & """").stdout
+				If InStr(strOut, "No rules match") Then
+					ShowMessage(vbTab & "Failed to add a firewall rule. No worries, it isn't really needed.")
+				Else
+					ShowMessage(vbTab & "... Success! Firewall rule added.")
+				End If
+		Else
+			ShowMessage("A firewall rule already existed For """ & fs.GetBaseName(strFilePath) & """")
+		End If
+		On Error Goto 0
+	Else
+		ShowMessage(vbTab & "Using HNetCfg.FwMgr")
+		Set objPolicy = objFirewall.LocalPolicy
+		Set objProfile = objPolicy.GetProfileByType(1)
+		'Check to see if we already have a rule
+		blnRule = False
+		If Len(intLocalPort) = 0 Then
+			Set colApplications = objProfile.AuthorizedApplications
+			For Each objApplication in colApplications
+				If Replace(Ucase(strFilePath), """", "") = Replace(Ucase(objApplication.ProcessImageFileName), """", "") Then
+					blnRule = True
+				End If
+			Next
+		Else
+			Set colPorts = objProfile.GloballyOpenPorts
+			For Each objPort in colPorts
+				If intLocalPort = objPort.Port Then
+					If Not objPort.Enabled Then
+						Set objPort = colPorts.Item(intLocalPort,6)
+						objPort.Enabled = TRUE
+					End If
+					blnRule = True
+				End If
+			Next
+		End If
+		'Set a rule allowing the application
+		If Not blnRule Then
+			ShowMessage(vbTab & "Adding new rule ...")
+			If Len(intLocalPort) = 0 Then
+				Set objApplication = CreateObject("HNetCfg.FwAuthorizedApplication")
+				objApplication.Name = fs.GetBaseName(strFilePath)
+				objApplication.IPVersion = 2
+				objApplication.ProcessImageFileName = strFilePath
+				objApplication.RemoteAddresses = "*"
+				objApplication.Scope = 0
+				objApplication.Enabled = True
+				Set colApplications = objProfile.AuthorizedApplications
+				On Error Resume Next
+				colApplications.Add(objApplication)
+				On Error Goto 0
+			Else
+				Set objPort = CreateObject("HNetCfg.FwOpenPort")
+				objPort.Port = intLocalPort
+				objPort.Name = fs.GetBaseName(strFilePath)
+				objPort.Enabled = True
+				Set colPorts = objProfile.GloballyOpenPorts
+				On Error Resume Next
+				colPorts.Add(objPort)
+				On Error Goto 0
+			End If
+		Else
+			ShowMessage(vbTab & "A firewall rule already exists.")
+		End If
+		'Check for the rule now...
+		blnRule = False
+		If Len(intLocalPort) = 0 Then
+			Set colApplications = objProfile.AuthorizedApplications
+			For Each objApplication in colApplications
+				If Replace(Ucase(strFilePath), """", "") = Replace(Ucase(objApplication.ProcessImageFileName), """", "") Then
+					blnRule = True
+				End If
+			Next
+		Else
+			Set colPorts = objProfile.GloballyOpenPorts
+			For Each objPort in colPorts
+				If intLocalPort = objPort.Port Then
+					blnRule = True
+				End If
+			Next
+		End If
+		If Not blnRule Then
+			ShowMessage(vbTab & "Failed to add a firewall rule. No worries, it isn't really needed.")
+		Else
+			ShowMessage(vbTab & "... Success!")
+		End If
+	End If
+End Sub
+
 '
 '
 ' MAIN
@@ -497,13 +605,14 @@ If (strSystemArchitecture = "x86") And (SetupArchitecture = "x64") Then
 End If
 
 If IsSelectedForce() Or IsInstallationNeeded(SetupVersion, SetupArchitecture, strSystemArchitecture) Then
+   strCmd = WshShell.ExpandEnvironmentStrings("%ComSpec%")
+   strTempDir = WshShell.ExpandEnvironmentStrings("%TEMP%")
    If isHttp(SetupLocation) Then
       ShowMessage("Downloading: " & SetupLocation & "/" & Setup)
       If SaveWebBinary(SetupLocation, Setup) Then
-         strCmd = WshShell.ExpandEnvironmentStrings("%ComSpec%")
-         strTempDir = WshShell.ExpandEnvironmentStrings("%TEMP%")
-         ShowMessage("Running: """ & strTempDir & "\" & Setup & """ " & SetupOptions)
-         WshShell.Run """" & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
+         ShowMessage("Scheduling: """ & strTempDir & "\" & Setup & """ " & SetupOptions)
+         ' WshShell.Run """" & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
+         WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C """ & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
          ShowMessage("Scheduling: DEL /Q /F """ & strTempDir & "\" & Setup & """")
          WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
          ShowMessage("Deployment done!")
@@ -511,8 +620,14 @@ If IsSelectedForce() Or IsInstallationNeeded(SetupVersion, SetupArchitecture, st
          ShowMessage("Error downloading '" & SetupLocation & "\" & Setup & "'!")
       End If
    Else
-      ShowMessage("Running: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
-      WshShell.Run "CMD.EXE /C """ & SetupLocation & "\" & Setup & """ " & SetupOptions, 0, True
+      Set objFSO = CreateObject("Scripting.FileSystemObject")
+      bOverwrite = True
+      objFSO.CopyFile SetupLocation & "\" & Setup, strTempDir & "\" & Setup, bOverwrite
+      ShowMessage("Scheduling: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
+      ' WshShell.Run "CMD.EXE /C """ & SetupLocation & "\" & Setup & """ " & SetupOptions, 0, True
+      WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C """ & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
+      ShowMessage("Scheduling: DEL /Q /F """ & strTempDir & "\" & Setup & """")
+      WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
       ShowMessage("Deployment done!")
    End If
 Else
