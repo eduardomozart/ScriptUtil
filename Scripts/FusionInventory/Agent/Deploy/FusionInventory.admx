@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+revision="1.0" schemaVersion="1.0"
+xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
+
+  <policyNamespaces>
+    <target prefix="FusionInventory" namespace="FusionInventory" />
+    <using prefix="windows"
+    namespace="Microsoft.Policies.Windows" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <categories>
+    <category name="FusionInventory_ROOT"
+    displayName="$(string.FusionInventory_ROOT)">
+      <parentCategory ref="windows:System" />
+    </category>
+  </categories>
+  <policies>
+    <policy name="FusionInventory_CONFIGURE32" class="Machine"
+    displayName="$(string.FusionInventory_CONFIGURE32)"
+    explainText="$(string.FusionInventory_CONFIGURE_EXPLAIN)"
+    presentation="$(presentation.FusionInventory_CONFIGURE)"
+    key="SOFTWARE\FusionInventory-Agent">
+      <parentCategory ref="FusionInventory_ROOT" />
+      <supportedOn ref="windows:SUPPORTED_WindowsXP" />
+      <elements>
+	    <text id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" />
+		<text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
+		<text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
+		<text id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" />
+		<text id="FusionInventory_Debug" valueName="debug" />
+		<text id="FusionInventory_DelayTime" valueName="delaytime" />
+		<text id="FusionInventory_HTML" valueName="html" />
+		<text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
+		<text id="FusionInventory_HTTPdPort" valueName="httpd-port" />
+		<text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
+        <text id="FusionInventory_Local" valueName="local" />
+		<text id="FusionInventory_LogFile" valueName="logfile" />
+		<text id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" />
+		<text id="FusionInventory_Logger" valueName="logger" />
+		<text id="FusionInventory_NoCategory" valueName="no-category" />
+		<text id="FusionInventory_NoHTTPd" valueName="no-httpd" />
+		<text id="FusionInventory_NoP2P" valueName="no-p2p" />
+		<text id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" />
+		<text id="FusionInventory_NoTask" valueName="no-task" />
+		<text id="FusionInventory_Password" valueName="password" />
+		<text id="FusionInventory_Proxy" valueName="proxy" />
+		<text id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" />
+		<text id="FusionInventory_ScanProfiles" valueName="scan-profiles" />
+		<text id="FusionInventory_Server" valueName="server" />
+		<text id="FusionInventory_Tag" valueName="tag" />
+		<text id="FusionInventory_Tasks" valueName="tasks" />
+		<text id="FusionInventory_Timeout" valueName="timeout" />
+        <text id="FusionInventory_User" valueName="user" />
+      </elements>
+    </policy>
+    <policy name="FusionInventory_CONFIGURE64" class="Machine"
+    displayName="$(string.FusionInventory_CONFIGURE64)"
+    explainText="$(string.FusionInventory_CONFIGURE_EXPLAIN)"
+    presentation="$(presentation.FusionInventory_CONFIGURE)"
+    key="SOFTWARE\Wow6432Node\FusionInventory-Agent">
+      <parentCategory ref="FusionInventory_ROOT" />
+      <supportedOn ref="windows:SUPPORTED_WindowsXP" />
+      <elements>
+	    <text id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" />
+		<text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
+		<text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
+		<text id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" />
+		<text id="FusionInventory_Debug" valueName="debug" />
+		<text id="FusionInventory_DelayTime" valueName="delaytime" />
+		<text id="FusionInventory_HTML" valueName="html" />
+		<text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
+		<text id="FusionInventory_HTTPdPort" valueName="httpd-port" />
+		<text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
+		<text id="FusionInventory_Local" valueName="local" />
+		<text id="FusionInventory_LogFile" valueName="logfile" />
+		<text id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" />
+		<text id="FusionInventory_Logger" valueName="logger" />
+		<text id="FusionInventory_NoCategory" valueName="no-category" />
+		<text id="FusionInventory_NoHTTPd" valueName="no-httpd" />
+		<text id="FusionInventory_NoP2P" valueName="no-p2p" />
+		<text id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" />
+		<text id="FusionInventory_NoTask" valueName="no-task" />
+		<text id="FusionInventory_Password" valueName="password" />
+		<text id="FusionInventory_Proxy" valueName="proxy" />
+		<text id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" />
+		<text id="FusionInventory_ScanProfiles" valueName="scan-profiles" />
+		<text id="FusionInventory_Server" valueName="server" />
+		<text id="FusionInventory_Tag" valueName="tag" />
+		<text id="FusionInventory_Tasks" valueName="tasks" />
+		<text id="FusionInventory_Timeout" valueName="timeout" />
+        <text id="FusionInventory_User" valueName="user" />
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

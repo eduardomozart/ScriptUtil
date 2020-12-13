@@ -1,5 +1,7 @@
 # FusionInventory-Agent-Deploy
 
+## Script VBScript (Visual Basic Script)
+
 This is a slightly modified version from the original ``fusioninventory-agent-deployment.vbs`` script file available at ``contrib\windows`` folder of [fusioninventory\fusioninventory-agent](https://github.com/fusioninventory/fusioninventory-agent) project.
 
 It was modified to add the following features:
@@ -11,7 +13,7 @@ It was modified to add the following features:
 1. Added sub procedure ``CreateDirs`` used by ``DeployFIServerCACert()`` function to create the certs folder several levels deep all in one go, if it doesn't exists.
 1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/debug``, ``/installtasks``, ``/no-p2p`` and ``/ca-cert-file``.
 
-## Directory Structure
+### Directory Structure
 
 ```
 \\AD.EXAMPLE.COM\NETLOGON\FUSIONINVENTORY-AGENT
@@ -22,3 +24,10 @@ It was modified to add the following features:
 └───certs
         cacert.pem
 ```
+
+## Group Policy
+
+Please read "[Déployer l’agent Fusion Inventory par GPO](https://www.it-connect.fr/deployer-lagent-fusion-inventory-par-gpo/)"  (French) for instructions on how to configure the FusionInventory Agent using Group Policy.
+
+1. Copy the file "FusionInventory.admx" to ``PolicyDefinitions`` directory.
+1. Copy the file "FusionInventory.adml" to ``PolicyDefinitions\en-US`` subdirectory.
