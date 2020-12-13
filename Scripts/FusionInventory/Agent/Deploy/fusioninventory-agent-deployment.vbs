@@ -88,8 +88,8 @@ SetupVersion = "2.5.2"
 ' Location for Release Candidates
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
-SetupLocation = "\\example.com\NETLOGON\FusionInventory-Agent"
-RemoveCIFSOpenFileSecurityWarning("example.com")
+SetupLocation = "\\ad.example.com\NETLOGON\FusionInventory-Agent"
+RemoveCIFSOpenFileSecurityWarning("ad.example.com")
 
 ' SetupArchitecture
 '    The setup architecture can be 'x86', 'x64' or 'Auto'
