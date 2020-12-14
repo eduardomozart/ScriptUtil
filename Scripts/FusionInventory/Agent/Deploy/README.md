@@ -33,3 +33,36 @@ Please read "[Déployer l’agent Fusion Inventory par GPO](https://www.it-conne
 
 1. Copy the file "FusionInventory.admx" to ``PolicyDefinitions`` directory.
 1. Copy the file "FusionInventory.adml" to ``PolicyDefinitions\en-US`` subdirectory.
+
+Sample configuration:
+
+```
+Collect Timeout  180 
+CA Cert Dir  
+CA Cert File ..\..\certs\cacert.pem 
+Conf Reload Interval  0 
+Debug  2 
+DelayTime  3600 
+HTML  Disabled 
+HTTPd IP  
+HTTPd Port  62354 
+HTTPd Trust 127.0.0.1/32,192.168.2.209/32 
+Local  
+Log File ..\..\logs\fusioninventory-agent.log 
+Log File - Max Size (MB)  16 
+Logger  
+No-Category  
+No-HTTPd  Disabled 
+No-P2P  Disabled 
+No-SSL Check  Disabled 
+No-Task  
+Password  
+Proxy  
+Scan HomeDirs  Disabled 
+Scan Profiles  Disabled 
+Server https://glpi.example.com/plugins/fusioninventory/ 
+Tag  
+Tasks  
+Timeout  180 
+User 
+```
