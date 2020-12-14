@@ -25,33 +25,159 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
       <parentCategory ref="FusionInventory_ROOT" />
       <supportedOn ref="windows:SUPPORTED_WindowsXP" />
       <elements>
-	    <text id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" />
-		<text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
-		<text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
-		<text id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" />
-		<text id="FusionInventory_Debug" valueName="debug" />
-		<text id="FusionInventory_DelayTime" valueName="delaytime" />
-		<text id="FusionInventory_HTML" valueName="html" />
-		<text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
-		<text id="FusionInventory_HTTPdPort" valueName="httpd-port" />
-		<text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
+	    <decimal id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" required="true" minValue="180" storeAsText="true" />
+	    <text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
+	    <text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
+	    <decimal id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" required="true" minValue="0" storeAsText="true" />
+	    <decimal id="FusionInventory_Debug" valueName="debug" required="true" minValue="0" maxValue="2" storeAsText="true" />
+	    <decimal id="FusionInventory_DelayTime" valueName="delaytime" required="true" minValue="3600" storeAsText="true" />
+	    <boolean id="FusionInventory_HTML" valueName="html">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="html">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="html">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
+	    <decimal id="FusionInventory_HTTPdPort" valueName="httpd-port" required="true" minValue="0" maxValue="65353" storeAsText="true" />
+	    <text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
         <text id="FusionInventory_Local" valueName="local" />
-		<text id="FusionInventory_LogFile" valueName="logfile" />
-		<text id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" />
-		<text id="FusionInventory_Logger" valueName="logger" />
-		<text id="FusionInventory_NoCategory" valueName="no-category" />
-		<text id="FusionInventory_NoHTTPd" valueName="no-httpd" />
-		<text id="FusionInventory_NoP2P" valueName="no-p2p" />
-		<text id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" />
-		<text id="FusionInventory_NoTask" valueName="no-task" />
-		<text id="FusionInventory_Password" valueName="password" />
-		<text id="FusionInventory_Proxy" valueName="proxy" />
-		<text id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" />
-		<text id="FusionInventory_ScanProfiles" valueName="scan-profiles" />
-		<text id="FusionInventory_Server" valueName="server" />
-		<text id="FusionInventory_Tag" valueName="tag" />
-		<text id="FusionInventory_Tasks" valueName="tasks" />
-		<text id="FusionInventory_Timeout" valueName="timeout" />
+	    <text id="FusionInventory_LogFile" valueName="logfile" />
+	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
+	    <text id="FusionInventory_Logger" valueName="logger" />
+	    <text id="FusionInventory_NoCategory" valueName="no-category" />
+	    <boolean id="FusionInventory_NoHTTPd" valueName="no-httpd">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_NoP2P" valueName="no-p2p">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_NoSSLCheck" valueName="no-ssl-check">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_NoTask" valueName="no-task" />
+	    <text id="FusionInventory_Password" valueName="password" />
+	    <text id="FusionInventory_Proxy" valueName="proxy" />
+	    <boolean id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_ScanProfiles" valueName="scan-profiles">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_Server" valueName="server" />
+	    <text id="FusionInventory_Tag" valueName="tag" />
+	    <text id="FusionInventory_Tasks" valueName="tasks" />
+	    <decimal id="FusionInventory_Timeout" valueName="timeout" required="true" minValue="180" storeAsText="true" />
         <text id="FusionInventory_User" valueName="user" />
       </elements>
     </policy>
@@ -63,33 +189,159 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
       <parentCategory ref="FusionInventory_ROOT" />
       <supportedOn ref="windows:SUPPORTED_WindowsXP" />
       <elements>
-	    <text id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" />
-		<text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
-		<text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
-		<text id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" />
-		<text id="FusionInventory_Debug" valueName="debug" />
-		<text id="FusionInventory_DelayTime" valueName="delaytime" />
-		<text id="FusionInventory_HTML" valueName="html" />
-		<text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
-		<text id="FusionInventory_HTTPdPort" valueName="httpd-port" />
-		<text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
-		<text id="FusionInventory_Local" valueName="local" />
-		<text id="FusionInventory_LogFile" valueName="logfile" />
-		<text id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" />
-		<text id="FusionInventory_Logger" valueName="logger" />
-		<text id="FusionInventory_NoCategory" valueName="no-category" />
-		<text id="FusionInventory_NoHTTPd" valueName="no-httpd" />
-		<text id="FusionInventory_NoP2P" valueName="no-p2p" />
-		<text id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" />
-		<text id="FusionInventory_NoTask" valueName="no-task" />
-		<text id="FusionInventory_Password" valueName="password" />
-		<text id="FusionInventory_Proxy" valueName="proxy" />
-		<text id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" />
-		<text id="FusionInventory_ScanProfiles" valueName="scan-profiles" />
-		<text id="FusionInventory_Server" valueName="server" />
-		<text id="FusionInventory_Tag" valueName="tag" />
-		<text id="FusionInventory_Tasks" valueName="tasks" />
-		<text id="FusionInventory_Timeout" valueName="timeout" />
+	    <decimal id="FusionInventory_CollectTimeout" valueName="backend-collect-timeout" required="true" minValue="180" storeAsText="true" />
+	    <text id="FusionInventory_CACertDir" valueName="ca-cert-dir" />
+	    <text id="FusionInventory_CACertFile" valueName="ca-cert-file" />
+	    <decimal id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" required="true" minValue="0" storeAsText="true" />
+	    <decimal id="FusionInventory_Debug" valueName="debug" required="true" minValue="0" maxValue="2" storeAsText="true" />
+	    <decimal id="FusionInventory_DelayTime" valueName="delaytime" required="true" minValue="3600" storeAsText="true" />
+	    <boolean id="FusionInventory_HTML" valueName="html">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="html">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="html">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
+	    <decimal id="FusionInventory_HTTPdPort" valueName="httpd-port" required="true" minValue="0" maxValue="65353" storeAsText="true" />
+	    <text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
+	    <text id="FusionInventory_Local" valueName="local" />
+	    <text id="FusionInventory_LogFile" valueName="logfile" />
+	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
+	    <text id="FusionInventory_Logger" valueName="logger" />
+	    <text id="FusionInventory_NoCategory" valueName="no-category" />
+	    <boolean id="FusionInventory_NoHTTPd" valueName="no-httpd">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_NoP2P" valueName="no-p2p">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_NoSSLCheck" valueName="no-ssl-check">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_NoTask" valueName="no-task" />
+	    <text id="FusionInventory_Password" valueName="password" />
+	    <text id="FusionInventory_Proxy" valueName="proxy" />
+	    <boolean id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <boolean id="FusionInventory_ScanProfiles" valueName="scan-profiles">
+           <trueValue>
+             <decimal value="0" />
+           </trueValue>
+           <falseValue>
+             <decimal value="1" />
+           </falseValue>
+           <trueList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
+               <value>
+                 <string>1</string>
+               </value>
+             </item>
+           </trueList>
+           <falseList>
+             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
+               <value>
+                 <string>0</string>
+               </value>
+             </item>
+           </falseList>
+	    </boolean>
+	    <text id="FusionInventory_Server" valueName="server" />
+	    <text id="FusionInventory_Tag" valueName="tag" />
+	    <text id="FusionInventory_Tasks" valueName="tasks" />
+	    <decimal id="FusionInventory_Timeout" valueName="timeout" required="true" minValue="180" storeAsText="true" />
         <text id="FusionInventory_User" valueName="user" />
       </elements>
     </policy>
