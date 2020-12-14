@@ -67,7 +67,7 @@ GetUAC()
 ' SetupVersion
 '    Setup version with the pattern <major>.<minor>.<release>[-<package>]
 '
-SetupVersion = "2.5.2"
+SetupVersion = "2.6"
 
 ' SetupLocation
 '    Depending on your needs or your environment, you can use either a HTTP or
@@ -106,7 +106,6 @@ SetupArchitecture = "Auto"
 '    that require it; double quotes (") doesn't work with UNCs.
 '
 SetupOptions = "/acceptlicense /runnow /execmode=service /add-firewall-exception /server='https://glpi.example.com/plugins/fusioninventory/' /debug=2 /installtasks=collect,deploy,inventory /no-p2p /ca-cert-file='" & DeployFIServerCACert() & "' /S"
-AddToFirewall CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%") & "\FusionInventory-Agent\FusionInventory-Agent.exe", 62354
 
 ' Setup
 '    The installer file name. You should not have to modify this variable ever.
@@ -123,7 +122,7 @@ Force = "No"
 '
 '    It's advisable to use Verbose = "Yes" with 'cscript //nologo ...'.
 '
-Verbose = "No"
+Verbose = "Yes"
 
 '
 '
@@ -131,7 +130,9 @@ Verbose = "No"
 '
 '
 
-Function AdvanceTime(nMinutes)
+AddToFirewall CreateObject("WScript.Shell").ExpandEnvironmentStrings("%PROGRAMFILES%") & "\FusionInventory-Agent\FusionInventory-Agent.exe", 62354
+
+Function AdvanceTime(nMinutes, dtmTimeFormat)
    Dim nMinimalMinutes, dtmTimeFuture
    ' As protection
    nMinimalMinutes = 5
@@ -139,10 +140,14 @@ Function AdvanceTime(nMinutes)
       nMinutes = nMinimalMinutes
    End If
    ' Add nMinutes to the current time
-   dtmTimeFuture = DateAdd ("n", nMinutes, Time)
+   dtmTimeFuture = DateAdd ("n", nMinutes, Now)
    ' Format the result value
    '    The command AT accepts 'HH:MM' values only
-   AdvanceTime = Hour(dtmTimeFuture) & ":" & Minute(dtmTimeFuture)
+   If dtmTimeFormat = "HH:MM" Then
+      AdvanceTime = Hour(dtmTimeFuture) & ":" & Minute(dtmTimeFuture)
+   ElseIf dtmTimeFormat = "DD/MM/YYYY" Then
+      AdvanceTime = Day(dtmTimeFuture) & "/" & Month(dtmTimeFuture) & "/" & Year(dtmTimeFuture)
+   End If
 End Function
 
 Function baseName (strng)
@@ -446,7 +451,7 @@ Sub CreateDirs( MyDirName )
 End Sub
 
 Sub AddToFirewall(strFilePath, intLocalPort)
-Dim objFirewall, objPolicy, objProfile, colApplications, objApplication, blnRule, strOut, fs, ws
+Dim objFirewall, objPolicy, objProfile, colApplications, objApplication, blnRule, colPorts, objPort, strOut, fs, ws
 	Set fs = CreateObject("Scripting.FileSystemObject")
 	Set ws = CreateObject("WScript.Shell")
 	Set objFirewall = Nothing
@@ -552,13 +557,152 @@ Dim objFirewall, objPolicy, objProfile, colApplications, objApplication, blnRule
 	End If
 End Sub
 
+Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
+	'------------------------------------------------------------------
+	' This sample schedules a task to start executable X seconds
+	' from the time the task is registered.
+	' https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--scripting-
+	'------------------------------------------------------------------
+	Dim fs
+	Set fs = CreateObject("Scripting.FileSystemObject")
+
+	' A constant that specifies a time-based trigger.
+	const TriggerTypeTime = 1
+	' A constant that specifies an executable action.
+	const ActionTypeExec = 0   
+
+
+	'********************************************************
+	' Create the TaskService object.
+	Dim service
+	Set service = CreateObject("Schedule.Service")
+	call service.Connect()
+
+	'********************************************************
+	' Get a folder to create a task definition in. 
+	Dim rootFolder
+	Set rootFolder = service.GetFolder("\")
+
+	' The taskDefinition variable is the TaskDefinition object.
+	Dim taskDefinition
+	' The flags parameter is 0 because it is not supported.
+	Set taskDefinition = service.NewTask(0) 
+
+	'********************************************************
+	' Define information about the task.
+
+	' Set the registration info for the task by 
+	' creating the RegistrationInfo object.
+	Dim regInfo
+	Set regInfo = taskDefinition.RegistrationInfo
+	regInfo.Description = "Start " & fs.GetBaseName(taskActionPath) & " at a certain time"
+	' regInfo.Author = "Author Name"
+
+	'********************************************************
+	' Set the principal for the task
+	Dim principal
+	Set principal = taskDefinition.Principal
+
+	' Set the logon type to interactive logon
+	' principal.LogonType = 3
+	Principal.LogonType = 5 ' TASK_LOGON_SERVICE_ACCOUNT Indicates that a Local System, Local Service, or Network Service account is being used as a security context to run the task.
+	Principal.RunLevel = 1 ' TASK_RUNLEVEL_HIGHEST
+
+
+	' Set the task setting info for the Task Scheduler by
+	' creating a TaskSettings object.
+	Dim settings
+	Set settings = taskDefinition.Settings
+	settings.Enabled = True
+	settings.StartWhenAvailable = True
+	settings.Hidden = False
+
+	'********************************************************
+	' Create a time-based trigger.
+	Dim triggers
+	Set triggers = taskDefinition.Triggers
+
+	Dim trigger
+	Set trigger = triggers.Create(TriggerTypeTime)
+
+	' Trigger variables that define when the trigger is active.
+	Dim startTime, endTime
+
+	Dim time
+	time = DateAdd("s", taskTime * 60, Now)  'start time = 5 minutes from now
+	startTime = XmlTime(time)
+
+	time = DateAdd("n", taskTime * 2, Now) 'end time = 10 minutes from now
+	endTime = XmlTime(time)
+
+	ShowMessage("startTime :" & startTime)
+	ShowMessage("endTime :" & endTime)
+
+	trigger.StartBoundary = startTime
+	trigger.EndBoundary = endTime
+	' trigger.ExecutionTimeLimit = "PT5M"    'Five minutes
+	trigger.Id = "TimeTriggerId"
+	trigger.Enabled = True
+
+	' Set the task repetition pattern for the task.
+	' This will repeat the task 5 times.
+	' Dim repetitionPattern
+	' Set repetitionPattern = trigger.Repetition
+	' repetitionPattern.Duration = "PT4M"
+	' repetitionPattern.Interval = "PT1M"
+
+	'***********************************************************
+	' Create the action for the task to execute.
+
+	' Add an action to the task to run notepad.exe.
+	Dim Action
+	Set Action = taskDefinition.Actions.Create( ActionTypeExec )
+	Action.Path = taskActionPath
+	Action.Arguments = taskActionArguments
+
+	ShowMessage("Task definition created. About to submit the task...")
+
+	'***********************************************************
+	' Register (create) the task.
+
+	call rootFolder.RegisterTaskDefinition( _
+		fs.GetBaseName(taskActionPath), taskDefinition, 6, , , 3)
+
+	ShowMessage("Task submitted.")
+End Function
+
+'------------------------------------------------------------------
+' Used to get the time for the trigger 
+' startBoundary and endBoundary.
+' Return the time in the correct format: 
+' YYYY-MM-DDTHH:MM:SS. 
+' https://docs.microsoft.com/en-us/windows/win32/taskschd/time-trigger-example--scripting-
+'------------------------------------------------------------------
+Function XmlTime(t)
+    Dim cSecond, cMinute, CHour, cDay, cMonth, cYear
+    Dim tTime, tDate
+
+    cSecond = "0" & Second(t)
+    cMinute = "0" & Minute(t)
+    cHour = "0" & Hour(t)
+    cDay = "0" & Day(t)
+    cMonth = "0" & Month(t)
+    cYear = Year(t)
+
+    tTime = Right(cHour, 2) & ":" & Right(cMinute, 2) & _
+        ":" & Right(cSecond, 2)
+    tDate = cYear & "-" & Right(cMonth, 2) & "-" & Right(cDay, 2)
+    XmlTime = tDate & "T" & tTime 
+End Function
+
 '
 '
 ' MAIN
 '
 '
 
-Dim nMinutesToAdvance, strCmd, strSystemArchitecture, strTempDir, WshShell
+Dim nMinutesToAdvance, strCmd, strSystemArchitecture, strTempDir, WshShell, objFSO, bOverwrite
+Dim strComputer, objWMIService, objNewJob, JobID, errJobCreated
 Set WshShell = WScript.CreateObject("WScript.shell")
 
 nMinutesToAdvance = 5
@@ -610,24 +754,23 @@ If IsSelectedForce() Or IsInstallationNeeded(SetupVersion, SetupArchitecture, st
    If isHttp(SetupLocation) Then
       ShowMessage("Downloading: " & SetupLocation & "/" & Setup)
       If SaveWebBinary(SetupLocation, Setup) Then
-         ShowMessage("Scheduling: """ & strTempDir & "\" & Setup & """ " & SetupOptions)
+         ' ShowMessage("Running: """ & strTempDir & "\" & Setup & """ " & SetupOptions)
          ' WshShell.Run """" & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
-         WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C """ & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
+         ShowMessage("Scheduling: """ & strTempDir & "\" & Setup & """ " & SetupOptions)
+         WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance, "HH:MM") & " " & strCmd & " /C """ & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
          ShowMessage("Scheduling: DEL /Q /F """ & strTempDir & "\" & Setup & """")
-         WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
+         WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance + nMinutesToAdvance, "HH:MM") & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
          ShowMessage("Deployment done!")
       Else
          ShowMessage("Error downloading '" & SetupLocation & "\" & Setup & "'!")
       End If
    Else
-      Set objFSO = CreateObject("Scripting.FileSystemObject")
-      bOverwrite = True
-      objFSO.CopyFile SetupLocation & "\" & Setup, strTempDir & "\" & Setup, bOverwrite
-      ShowMessage("Scheduling: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
+      ' ShowMessage("Running: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
       ' WshShell.Run "CMD.EXE /C """ & SetupLocation & "\" & Setup & """ " & SetupOptions, 0, True
-      WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C """ & strTempDir & "\" & Setup & """ " & SetupOptions, 0, True
-      ShowMessage("Scheduling: DEL /Q /F """ & strTempDir & "\" & Setup & """")
-      WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance) & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
+      ShowMessage("Scheduling: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
+      ' WshShell.Run "SCHTASKS.EXE /Delete /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /F", 0, True
+      ' WshShell.Run "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /TR ""\""" & strTempDir & "\" & Setup & "\"" " & SetupOptions & " /SC ONCE /SD " & AdvanceTime(nMinutesToAdvance, "DD/MM/YYYY") & " /ST " & AdvanceTime(nMinutesToAdvance, "HH:MM") & "", 0, True           
+      TaskScheduler objFSO.BuildPath(SetupLocation, Setup), SetupOptions, 5
       ShowMessage("Deployment done!")
    End If
 Else
