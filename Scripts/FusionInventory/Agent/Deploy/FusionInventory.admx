@@ -31,149 +31,23 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
 	    <decimal id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" required="true" minValue="0" storeAsText="true" />
 	    <decimal id="FusionInventory_Debug" valueName="debug" required="true" minValue="0" maxValue="2" storeAsText="true" />
 	    <decimal id="FusionInventory_DelayTime" valueName="delaytime" required="true" minValue="3600" storeAsText="true" />
-	    <boolean id="FusionInventory_HTML" valueName="html">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="html">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="html">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+	    <decimal id="FusionInventory_HTML" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
 	    <decimal id="FusionInventory_HTTPdPort" valueName="httpd-port" required="true" minValue="0" maxValue="65353" storeAsText="true" />
 	    <text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
-        <text id="FusionInventory_Local" valueName="local" />
+	    <text id="FusionInventory_Local" valueName="local" />
 	    <text id="FusionInventory_LogFile" valueName="logfile" />
 	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Logger" valueName="logger" />
 	    <text id="FusionInventory_NoCategory" valueName="no-category" />
-	    <boolean id="FusionInventory_NoHTTPd" valueName="no-httpd">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_NoP2P" valueName="no-p2p">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_NoSSLCheck" valueName="no-ssl-check">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+		<decimal id="FusionInventory_NoHTTPd" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoP2P" valueName="no-p2p" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_NoTask" valueName="no-task" />
 	    <text id="FusionInventory_Password" valueName="password" />
 	    <text id="FusionInventory_Proxy" valueName="proxy" />
-	    <boolean id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_ScanProfiles" valueName="scan-profiles">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+		<decimal id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_ScanProfiles" valueName="scan-profiles" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Server" valueName="server" />
 	    <text id="FusionInventory_Tag" valueName="tag" />
 	    <text id="FusionInventory_Tasks" valueName="tasks" />
@@ -195,28 +69,7 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
 	    <decimal id="FusionInventory_ConfReloadInterval" valueName="conf-reload-interval" required="true" minValue="0" storeAsText="true" />
 	    <decimal id="FusionInventory_Debug" valueName="debug" required="true" minValue="0" maxValue="2" storeAsText="true" />
 	    <decimal id="FusionInventory_DelayTime" valueName="delaytime" required="true" minValue="3600" storeAsText="true" />
-	    <boolean id="FusionInventory_HTML" valueName="html">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="html">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="html">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+	    <decimal id="FusionInventory_HTML" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_HTTPdIP" valueName="httpd-ip" />
 	    <decimal id="FusionInventory_HTTPdPort" valueName="httpd-port" required="true" minValue="0" maxValue="65353" storeAsText="true" />
 	    <text id="FusionInventory_HTTPdTrust" valueName="httpd-trust" />
@@ -225,119 +78,14 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
 	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Logger" valueName="logger" />
 	    <text id="FusionInventory_NoCategory" valueName="no-category" />
-	    <boolean id="FusionInventory_NoHTTPd" valueName="no-httpd">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-httpd">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_NoP2P" valueName="no-p2p">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-p2p">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_NoSSLCheck" valueName="no-ssl-check">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="no-ssl-check">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+		<decimal id="FusionInventory_NoHTTPd" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoP2P" valueName="no-p2p" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_NoTask" valueName="no-task" />
 	    <text id="FusionInventory_Password" valueName="password" />
 	    <text id="FusionInventory_Proxy" valueName="proxy" />
-	    <boolean id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-homedirs">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
-	    <boolean id="FusionInventory_ScanProfiles" valueName="scan-profiles">
-           <trueValue>
-             <decimal value="0" />
-           </trueValue>
-           <falseValue>
-             <decimal value="1" />
-           </falseValue>
-           <trueList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
-               <value>
-                 <string>1</string>
-               </value>
-             </item>
-           </trueList>
-           <falseList>
-             <item key="Software\FusionInventory-Agent" valueName="scan-profiles">
-               <value>
-                 <string>0</string>
-               </value>
-             </item>
-           </falseList>
-	    </boolean>
+		<decimal id="FusionInventory_ScanHomeDirs" valueName="scan-homedirs" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_ScanProfiles" valueName="scan-profiles" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Server" valueName="server" />
 	    <text id="FusionInventory_Tag" valueName="tag" />
 	    <text id="FusionInventory_Tasks" valueName="tasks" />
