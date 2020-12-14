@@ -37,9 +37,9 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
         <decimalTextBox refId="FusionInventory_DelayTime" defaultValue="3600" spin="true" spinStep="60">
           DelayTime
         </decimalTextBox>
-        <checkBox refId="FusionInventory_HTML" defaultChecked="false">
+        <decimalTextBox refId="FusionInventory_HTML" defaultValue="0" spin="true" spinStep="1">
           HTML
-        </checkBox>
+        </decimalTextBox>
         <textBox refId="FusionInventory_HTTPdIP">
           <label>HTTPd IP</label>
         </textBox>
@@ -60,19 +60,20 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
         </decimalTextBox>
         <textBox refId="FusionInventory_Logger">
           <label>Logger</label>
+		  <defaultValue>File</defaultValue>
         </textBox>
         <textBox refId="FusionInventory_NoCategory">
           <label>No-Category</label>
         </textBox>
-        <checkBox refId="FusionInventory_NoHTTPd" defaultChecked="false">
+        <decimalTextBox refId="FusionInventory_NoHTTPd" defaultValue="0" spin="true" spinStep="1">
           No-HTTPd
-        </checkBox>
-        <checkBox refId="FusionInventory_NoP2P" defaultChecked="false">
+        </decimalTextBox>
+        <decimalTextBox refId="FusionInventory_NoP2P" defaultValue="0" spin="true" spinStep="1">
           No-P2P
-        </checkBox>
-        <checkBox refId="FusionInventory_NoSSLCheck" defaultChecked="false">
+        </decimalTextBox>
+        <decimalTextBox refId="FusionInventory_NoSSLCheck" defaultValue="0" spin="true" spinStep="1">
           No-SSL Check
-        </checkBox>
+        </decimalTextBox>
         <textBox refId="FusionInventory_NoTask">
           <label>No-Task</label>
         </textBox>
@@ -82,12 +83,12 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
         <textBox refId="FusionInventory_Proxy">
           <label>Proxy</label>
         </textBox>
-        <checkBox refId="FusionInventory_ScanHomeDirs" defaultChecked="false">
+        <decimalTextBox refId="FusionInventory_ScanHomeDirs" defaultValue="0" spin="true" spinStep="1">
           Scan HomeDirs
-        </checkBox>
-        <checkBox refId="FusionInventory_ScanProfiles"  defaultChecked="false">
+        </decimalTextBox>
+        <decimalTextBox refId="FusionInventory_ScanProfiles" defaultValue="0" spin="true" spinStep="1">
           Scan Profiles
-        </checkBox>
+        </decimalTextBox>
         <textBox refId="FusionInventory_Server">
           <label>Server</label>
         </textBox>
