@@ -19,88 +19,88 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
     </stringTable>
     <presentationTable>
       <presentation id="FusionInventory_CONFIGURE">
-	    <decimalTextBox refId="FusionInventory_CollectTimeout" defaultValue="180" spin="true" spinStep="60">
+        <decimalTextBox refId="FusionInventory_CollectTimeout" defaultValue="180" spin="true" spinStep="60">
           Collect Timeout
-		</decimalTextBox>
-		<textBox refId="FusionInventory_CACertDir">
+        </decimalTextBox>
+        <textBox refId="FusionInventory_CACertDir">
           <label>CA Cert Dir</label>
         </textBox>
         <textBox refId="FusionInventory_CACertFile">
           <label>CA Cert File</label>
         </textBox>
-		<decimalTextBox refId="FusionInventory_ConfReloadInterval" defaultValue="0" spin="true" spinStep="60">
+        <decimalTextBox refId="FusionInventory_ConfReloadInterval" defaultValue="0" spin="true" spinStep="60">
           Conf Reload Interval
-		</decimalTextBox>
-		<decimalTextBox refId="FusionInventory_Debug" defaultValue="0" spin="true" spinStep="1">
+        </decimalTextBox>
+        <decimalTextBox refId="FusionInventory_Debug" defaultValue="0" spin="true" spinStep="1">
           Debug
-		</decimalTextBox>
-		<decimalTextBox refId="FusionInventory_DelayTime" defaultValue="3600" spin="true" spinStep="60">
+        </decimalTextBox>
+        <decimalTextBox refId="FusionInventory_DelayTime" defaultValue="3600" spin="true" spinStep="60">
           DelayTime
-		</decimalTextBox>
-		<checkBox refId="FusionInventory_HTML" defaultChecked="false">
+        </decimalTextBox>
+        <checkBox refId="FusionInventory_HTML" defaultChecked="false">
           HTML
         </checkBox>
-		<textBox refId="FusionInventory_HTTPdIP">
+        <textBox refId="FusionInventory_HTTPdIP">
           <label>HTTPd IP</label>
         </textBox>
-		<decimalTextBox refId="FusionInventory_HTTPdPort" defaultValue="62354" spin="true" spinStep="1">
+        <decimalTextBox refId="FusionInventory_HTTPdPort" defaultValue="62354" spin="true" spinStep="1">
           HTTPd Port
-		</decimalTextBox>
-		<textBox refId="FusionInventory_HTTPdTrust">
+        </decimalTextBox>
+        <textBox refId="FusionInventory_HTTPdTrust">
           <label>HTTPd Trust</label>
         </textBox>
-		<textBox refId="FusionInventory_Local">
+        <textBox refId="FusionInventory_Local">
           <label>Local</label>
         </textBox>
-		<textBox refId="FusionInventory_LogFile">
+        <textBox refId="FusionInventory_LogFile">
           <label>Log File</label>
         </textBox>
-		<decimalTextBox refId="FusionInventory_LogFileMaxSize" defaultValue="16" spin="true" spinStep="1">
+        <decimalTextBox refId="FusionInventory_LogFileMaxSize" defaultValue="16" spin="true" spinStep="1">
           Log File - Max Size (MB)
-		</decimalTextBox>
-		<textBox refId="FusionInventory_Logger">
+        </decimalTextBox>
+        <textBox refId="FusionInventory_Logger">
           <label>Logger</label>
         </textBox>
-		<textBox refId="FusionInventory_NoCategory">
+        <textBox refId="FusionInventory_NoCategory">
           <label>No-Category</label>
         </textBox>
-		<checkBox refId="FusionInventory_NoHTTPd" defaultChecked="false">
+        <checkBox refId="FusionInventory_NoHTTPd" defaultChecked="false">
           No-HTTPd
         </checkBox>
-		<checkBox refId="FusionInventory_NoP2P" defaultChecked="false">
+        <checkBox refId="FusionInventory_NoP2P" defaultChecked="false">
           No-P2P
         </checkBox>
-		<checkBox refId="FusionInventory_NoSSLCheck" defaultChecked="false">
+        <checkBox refId="FusionInventory_NoSSLCheck" defaultChecked="false">
           No-SSL Check
         </checkBox>
-		<textBox refId="FusionInventory_NoTask">
+        <textBox refId="FusionInventory_NoTask">
           <label>No-Task</label>
         </textBox>
-		<textBox refId="FusionInventory_Password">
+        <textBox refId="FusionInventory_Password">
           <label>Password</label>
         </textBox>
         <textBox refId="FusionInventory_Proxy">
           <label>Proxy</label>
         </textBox>
-		<checkBox refId="FusionInventory_ScanHomeDirs" defaultChecked="false">
+        <checkBox refId="FusionInventory_ScanHomeDirs" defaultChecked="false">
           Scan HomeDirs
         </checkBox>
-		<checkBox refId="FusionInventory_ScanProfiles"  defaultChecked="false">
+        <checkBox refId="FusionInventory_ScanProfiles"  defaultChecked="false">
           Scan Profiles
-		</checkBox>
-		<textBox refId="FusionInventory_Server">
+        </checkBox>
+        <textBox refId="FusionInventory_Server">
           <label>Server</label>
         </textBox>
-		<textBox refId="FusionInventory_Tag">
+        <textBox refId="FusionInventory_Tag">
           <label>Tag</label>
         </textBox>
         <textBox refId="FusionInventory_Tasks">
           <label>Tasks</label>
         </textBox>
-		<decimalTextBox refId="FusionInventory_Timeout" defaultValue="180" spin="true" spinStep="60">
+        <decimalTextBox refId="FusionInventory_Timeout" defaultValue="180" spin="true" spinStep="60">
           Timeout
-		</decimalTextBox>
-		<textBox refId="FusionInventory_User">
+        </decimalTextBox>
+        <textBox refId="FusionInventory_User">
           <label>User</label>
         </textBox>
       </presentation>
