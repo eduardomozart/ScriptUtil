@@ -592,7 +592,8 @@ End Function
 '
 '
 
-Dim nMinutesToAdvance, strCmd, strSystemArchitecture, strTempDir, WshShell, objFSO, bOverwrite
+Dim nMinutesToAdvance, strCmd, strSystemArchitecture, strTempDir, WshShell
+' Dim objFSO, bOverwrite
 Dim strComputer, objWMIService, objNewJob, JobID, errJobCreated
 Set WshShell = WScript.CreateObject("WScript.shell")
 
@@ -661,7 +662,7 @@ If IsSelectedForce() Or IsInstallationNeeded(SetupVersion, SetupArchitecture, st
       ShowMessage("Scheduling: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
       ' WshShell.Run "SCHTASKS.EXE /Delete /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /F", 0, True
       ' WshShell.Run "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /TR ""\""" & strTempDir & "\" & Setup & "\"" " & SetupOptions & " /SC ONCE /SD " & AdvanceTime(nMinutesToAdvance, "DD/MM/YYYY") & " /ST " & AdvanceTime(nMinutesToAdvance, "HH:MM") & "", 0, True           
-      TaskScheduler objFSO.BuildPath(SetupLocation, Setup), SetupOptions, 5
+      TaskScheduler SetupLocation & "\" & Setup, SetupOptions, 5
       ShowMessage("Deployment done!")
    End If
 Else
