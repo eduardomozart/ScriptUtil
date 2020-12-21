@@ -58,6 +58,17 @@ Dim Setup, SetupArchitecture, SetupLocation, SetupOptions, SetupVersion
 
 GetUAC()
 
+Dim arrArgs, strArg
+Set arrArgs = Wscript.Arguments
+For Each strArg In arrArgs
+  	Select Case LCase(strArg)
+		Case "/force"
+			Force = "True"
+		Case "/verbose"
+			Verbose = "True"
+	End Select
+Next
+
 '
 '
 ' USER SETTINGS
@@ -115,14 +126,18 @@ Setup = "fusioninventory-agent_windows-" & SetupArchitecture & "_" & SetupVersio
 ' Force
 '    Force the installation even whether Setup is previously installed.
 '
-Force = "No"
+If Len(Force) = 0 Then
+	Force = "No"
+End If
 
 ' Verbose
 '    Enable or disable the information messages.
 '
 '    It's advisable to use Verbose = "Yes" with 'cscript //nologo ...'.
 '
-Verbose = "No"
+If Len(Verbose) = 0 Then
+	Verbose = "No"
+End If
 
 '
 '
@@ -495,9 +510,14 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	Set principal = taskDefinition.Principal
 
 	' Set the logon type to interactive logon
-	' principal.LogonType = 3
-	Principal.LogonType = 5 ' TASK_LOGON_SERVICE_ACCOUNT Indicates that a Local System, Local Service, or Network Service account is being used as a security context to run the task.
-	Principal.RunLevel = 1 ' TASK_RUNLEVEL_HIGHEST
+	' taskDefinition.principal.LogonType = 3
+	' taskDefinition.principal.UserId = "S-1-5-21-2764009396-4153354299-2297777058-1001"
+	' taskDefinition.principal.RunLevel = 0  ' Least privilege
+	' taskDefinition.principal.GroupId = "Builtin\Administrators"
+	
+	principal.UserId = "S-1-5-18" ' SYSTEM
+	principal.LogonType = 5 ' TASK_LOGON_SERVICE_ACCOUNT Indicates that a Local System, Local Service, or Network Service account is being used as a security context to run the task.
+	principal.RunLevel = 1 ' TASK_RUNLEVEL_HIGHEST
 
 
 	' Set the task setting info for the Task Scheduler by
@@ -505,7 +525,10 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	Dim settings
 	Set settings = taskDefinition.Settings
 	settings.Enabled = True
+	settings.AllowDemandStart = True
 	settings.StartWhenAvailable = True
+	settings.StopIfGoingOnBatteries=False
+	settings.DisallowStartIfOnBatteries=False
 	settings.Hidden = False
 
 	'********************************************************
@@ -555,9 +578,10 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 
 	'***********************************************************
 	' Register (create) the task.
-
+	Const createOrUpdateTask = 6
+	Const logonType = 5
 	call rootFolder.RegisterTaskDefinition( _
-		fs.GetBaseName(taskActionPath), taskDefinition, 6, , , 3)
+		fs.GetBaseName(taskActionPath), taskDefinition, createOrUpdateTask, , , 3)
 
 	ShowMessage("Task submitted.")
 End Function
@@ -593,7 +617,7 @@ End Function
 '
 
 Dim nMinutesToAdvance, strCmd, strSystemArchitecture, strTempDir, WshShell
-' Dim objFSO, bOverwrite
+Dim objFSO, bOverwrite
 Dim strComputer, objWMIService, objNewJob, JobID, errJobCreated
 Set WshShell = WScript.CreateObject("WScript.shell")
 
@@ -659,10 +683,15 @@ If IsSelectedForce() Or IsInstallationNeeded(SetupVersion, SetupArchitecture, st
    Else
       ' ShowMessage("Running: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
       ' WshShell.Run "CMD.EXE /C """ & SetupLocation & "\" & Setup & """ " & SetupOptions, 0, True
+	  Set objFSO = CreateObject("Scripting.FileSystemObject")
+	  bOverwrite = True
+	  objFSO.CopyFile SetupLocation & "\" & Setup, strTempDir & "\" & Setup, bOverwrite
       ShowMessage("Scheduling: """ & SetupLocation & "\" & Setup & """ " & SetupOptions)
       ' WshShell.Run "SCHTASKS.EXE /Delete /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /F", 0, True
       ' WshShell.Run "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(strTempDir & "\" & Setup) & """ /TR ""\""" & strTempDir & "\" & Setup & "\"" " & SetupOptions & " /SC ONCE /SD " & AdvanceTime(nMinutesToAdvance, "DD/MM/YYYY") & " /ST " & AdvanceTime(nMinutesToAdvance, "HH:MM") & "", 0, True           
       TaskScheduler SetupLocation & "\" & Setup, SetupOptions, 5
+      ShowMessage("Scheduling: DEL /Q /F """ & strTempDir & "\" & Setup & """")
+      WshShell.Run "AT.EXE " & AdvanceTime(nMinutesToAdvance + nMinutesToAdvance, "HH:MM") & " " & strCmd & " /C ""DEL /Q /F """"" & strTempDir & "\" & Setup & """""", 0, True
       ShowMessage("Deployment done!")
    End If
 Else
