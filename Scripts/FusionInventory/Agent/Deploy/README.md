@@ -13,7 +13,7 @@ It was modified to add the following features:
 1. Added sub procedure ``CreateDirs`` used by ``DeployFIServerCACert()`` function to create the certs folder several levels deep all in one go, if it doesn't exists.
 1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/execmode``, ``/add-firewall-exception``, ``/debug``, ``/installtasks``, ``/no-p2p`` and ``/ca-cert-file``.
 1. Added the functions ``TaskScheduler()`` and ``XmlTime()`` to schedule the installation of the agent instead of installing it immediately. The basic problem with updating the agent through a deployment task is the agent will have to uninstall itself while in use, thus throwing some errors. A good method to update the agent without errors is to create a scheduled task that will update the agent to it's latest version. Please see "[Update FusionInventory agent through a deploy task](http://fusioninventory.org/documentation/tasks/updateagentwithdeploytask.html)" for more information.
-1. Now you can specify '/Verbose' and '/Force' arguments from command line to debug or force the FusionInventory Agent installation without editing the script manually.
+1. Now you can specify ``/Verbose`` and ``/Force`` arguments from command line to debug or force the FusionInventory Agent installation without editing the script manually.
 
 ### Directory Structure
 
