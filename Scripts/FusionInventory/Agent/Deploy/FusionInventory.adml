@@ -42,6 +42,7 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
         </decimalTextBox>
         <textBox refId="FusionInventory_HTTPdIP">
           <label>HTTPd IP</label>
+          <defaultValue>0.0.0.0</defaultValue>
         </textBox>
         <decimalTextBox refId="FusionInventory_HTTPdPort" defaultValue="62354" spin="true" spinStep="1">
           HTTPd Port
@@ -60,7 +61,7 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
         </decimalTextBox>
         <textBox refId="FusionInventory_Logger">
           <label>Logger</label>
-		  <defaultValue>File</defaultValue>
+          <defaultValue>File</defaultValue>
         </textBox>
         <textBox refId="FusionInventory_NoCategory">
           <label>No-Category</label>
