@@ -8,19 +8,20 @@ Const HKEY_CURRENT_USER    = &H80000001
 Const HKEY_LOCAL_MACHINE   = &H80000002
 
 Function GetOfficeVersion
-    strTempKeyPath = "Outlook.Application\CurVer"
-    strTempValueName = ""
-    oReg.GetStringValue HKEY_CLASSES_ROOT, strTempKeyPath, strTempValueName, strValue
-    If (Not IsNull(strValue)) Then
-        Select Case strValue
-             Case "Outlook.Application.16"
-                GetOfficeVersion = "16.0"
-             Case "Outlook.Application.15"
-                GetOfficeVersion = "15.0"
-             Case "Outlook.Application.14"
-                GetOfficeVersion = "14.0"                                                      
-        End Select
-    End If
+	Dim strKeyOutlookAppPath, strOutlookPathValue, strOutlookVersionNumber
+	Dim oFSO : oFSO = CreateObject("Scripting.FileSystemObject") 
+	
+	'Determine path to outlook.exe
+	strKeyOutlookAppPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\OUTLOOK.EXE"
+	oReg.GetStringValue HKEY_LOCAL_MACHINE, strKeyOutlookAppPath, "Path", strOutlookPathValue
+	
+	'Verify that the outlook.exe exist and get version information
+	If (Not IsNull(strOutlookPathValue)) Then
+		If oFSO.FileExists(objFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe")) Then
+			strOutlookVersionNumber = objFSO.GetFileVersion(objFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe"))
+			GetOfficeVersion = Left(strOutlookVersionNumber, InStr(strOutlookVersionNumber, ".0")+1)
+		End If
+	End If
 End Function
 
 Function GetOutlookBitness
@@ -44,17 +45,19 @@ Function CheckOutlookProfile
 	strTempValueName = "DefaultProfile"
 	oReg.GetStringValue HKEY_LOCAL_MACHINE, strTempKeyPath, strTempValueName, strValue
 	If (Not IsNull(strValue)) Then
-        ' CheckOutlookProfile = strValue
+		' CheckOutlookProfile = strValue
 		CheckOutlookProfile = True
 		Exit Function
 	End If
 	
-    strTempKeyPath = "SOFTWARE\Microsoft\Office\" & GetOfficeVersion & "\Outlook\Profiles"
-	oReg.EnumKey HKEY_CURRENT_USER, strTempKeyPath, arrSubKeys
-	If UBound(arrSubKeys) <> -1 Then
-        ' CheckOutlookProfile = strValue
-		CheckOutlookProfile = True
-		Exit Function
+	strTempKeyPath = "SOFTWARE\Microsoft\Office\" & GetOfficeVersion & "\Outlook\Profiles"
+	iRet = oReg.EnumKey(HKEY_CURRENT_USER, strTempKeyPath, arrSubKeys)
+	If iRet = 0 Then
+		If UBound(arrSubKeys) <> -1 Then
+			' CheckOutlookProfile = strValue
+			CheckOutlookProfile = True
+			Exit Function
+		End If
 	End If
 	
 	CheckOutlookProfile = False
@@ -68,7 +71,7 @@ If (Not boolRerun) then
 End if
 If ((IsNull(strValue)) or (strValue = 0)) Then
     bOutlookProfile = CheckOutlookProfile
-	strBitness = GetOutlookBitness
+    strBitness = GetOutlookBitness
     If ((bOutlookProfile) And (strBitness <> "")) Then
         cmd = strDirectory & "\" & strBitness & "\" & strExeName & " " & strArguments
         Set oShell = CreateObject("WScript.Shell")
