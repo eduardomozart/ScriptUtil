@@ -17,7 +17,7 @@ Function GetOfficeVersion
 	
 	'Verify that the outlook.exe exist and get version information
 	If (Not IsNull(strOutlookPathValue)) Then
-		If oFSO.FileExists(objFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe")) Then
+		If oFSO.FileExists(oFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe")) Then
 			strOutlookVersionNumber = objFSO.GetFileVersion(objFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe"))
 			GetOfficeVersion = Left(strOutlookVersionNumber, InStr(strOutlookVersionNumber, ".0")+1)
 		End If
