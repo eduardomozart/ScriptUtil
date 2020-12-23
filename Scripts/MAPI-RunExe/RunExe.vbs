@@ -9,7 +9,7 @@ Const HKEY_LOCAL_MACHINE   = &H80000002
 
 Function GetOfficeVersion
 	Dim strKeyOutlookAppPath, strOutlookPathValue, strOutlookVersionNumber
-	Dim oFSO : oFSO = CreateObject("Scripting.FileSystemObject") 
+	Dim oFSO : Set oFSO = CreateObject("Scripting.FileSystemObject") 
 	
 	'Determine path to outlook.exe
 	strKeyOutlookAppPath = "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\OUTLOOK.EXE"
@@ -18,7 +18,7 @@ Function GetOfficeVersion
 	'Verify that the outlook.exe exist and get version information
 	If (Not IsNull(strOutlookPathValue)) Then
 		If oFSO.FileExists(oFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe")) Then
-			strOutlookVersionNumber = objFSO.GetFileVersion(objFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe"))
+			strOutlookVersionNumber = oFSO.GetFileVersion(oFSO.BuildPath(strOutlookPathValue, "OUTLOOK.exe"))
 			GetOfficeVersion = Left(strOutlookVersionNumber, InStr(strOutlookVersionNumber, ".0")+1)
 		End If
 	End If
