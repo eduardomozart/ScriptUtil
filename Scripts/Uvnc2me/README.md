@@ -2,6 +2,8 @@
 
 Customized version of Uvnc2me for Win7+ in a single 7z SFX file (Self-extracting archive).
 
+![](uvnc2me_custom/background.bmp)
+
 **Note**: I recommend that you use [AeroAdmin](https://www.aeroadmin.com/en/) instead of Uvnc2me. AeroAdmin is free for commercial use and compatible with Windows XP/Server 2003 [1], but it's File Transfer is a paid feature. If you do not need to request permission to remotely access the user's computer (for example, you only provide support to your company's internal users), consider using [MeshCentral](https://www.meshcommander.com/meshcentral2).
 
 ## How the Uvnc2me works?
