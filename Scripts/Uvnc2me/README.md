@@ -102,7 +102,7 @@ After creating the SFX file, you can distribute it to your end users. I would li
 
 The repository "[PSAppDeployToolkit-Scripts](https://github.com/coldscientist/PSAppDeployToolkit-Scripts)" provides a PowerShell installation script that automatically adds an exception to Uvnc2me in the Windows Firewall and creates a Scheduled Task for automatic execution of the Uvnc2me with administrative permissions (UAC).
 
-## Referências 
+## References 
 
 1. [Features](https://www.aeroadmin.com/en/features.html). AeroAdmin.
 2. [[DIS_UAC] and/or "request UAC on start"?](https://forum.ultravnc.net/viewtopic.php?f=15&t=35218). UltraVNC Forums.
