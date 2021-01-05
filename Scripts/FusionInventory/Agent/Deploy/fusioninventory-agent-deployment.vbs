@@ -99,7 +99,7 @@ SetupVersion = "2.6"
 ' Location for Release Candidates
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
-SetupLocation = "\\ad.example.com\NETLOGON\FusionInventory-Agent"
+SetupLocation = "\\ad.example.com\SYSVOL\ad.example.com\Policies\{421703F7-008B-4105-AA4F-6D133FA3C131}\Machine\Scripts\Startup\FusionInventory-Agent"
 RemoveCIFSOpenFileSecurityWarning("ad.example.com")
 
 ' SetupArchitecture
@@ -475,10 +475,12 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	
 	Dim WshShell : Set WshShell = WScript.CreateObject("WScript.shell")
 	
-	Dim strOSVer, strRunLevel
+	Dim strOSVer, strRunLevel, strCommand
+	' REG QUERY "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v CurrentVersion
 	strOSVer = WshShell.RegRead("HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentVersion")
 	' https://superuser.com/questions/243605/how-do-i-specify-run-with-highest-privileges-in-schtasks
-	If CInt(Left(strOSVer, InStr(strOSVer, ".")+1)) > 6 Then strRunLevel = " /RL HIGHEST"
+	ShowMessage("System version detected: " & strOSVer)
+	If CInt(Left(strOSVer, InStr(strOSVer, "."))) > 6 Then strRunLevel = " /RL HIGHEST"
 	
 	Dim strWinDir : strWinDir = WshShell.ExpandEnvironmentStrings("%WinDir%")
 	Dim strTempDir : strTempDir = WshShell.ExpandEnvironmentStrings("%TEMP%")
@@ -494,16 +496,19 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	End If
 	objFile.Close
 	
-	ShowMessage("Scheduling: " & taskActionPath & " " & taskActionArguments)
-	If objFSO.FileExists(objFSO.BuildPath(strWinDir, "System32\schtasks.exe")) Then
+	' ShowMessage("Scheduling: " & taskActionPath & " " & taskActionArguments)
+	' If objFSO.FileExists(objFSO.BuildPath(strWinDir, "System32\schtasks.exe")) Then
+	If CInt(Left(strOSVer, InStr(strOSVer, "."))) > 6 Then
 		WshShell.Run "SCHTASKS.EXE /Delete /TN """ & objFSO.GetBaseName(taskActionPath) & """ /F", 0, True
-		WshShell.Run "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(taskActionPath) & """ /TR """ & strTempBat & """ /SC ONCE /ST " & taskTime & " /RU SYSTEM" & strRunLevel, 0, True
+		strCommand = "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(taskActionPath) & """ /TR """ & strTempBat & """ /SC ONCE /ST " & taskTime & " /RU SYSTEM" & strRunLevel
 	Else
 		'AT /DELETE /YES
 		'AT 12:45 /every:M,T,W,Th,F,S,Su %BATCHROOT%\FAVLSSIC.BAT
 		'AT 03:05 /interactive /every:Su %BATCHROOT%\BANDSICH.BAT
-		WshShell.Run "AT.EXE " & taskTime & " " & strCmd & " /C """ & strTempBat & """", 0, True
+		strCommand = "AT.EXE " & taskTime & " " & strCmd & " /C """ & strTempBat & """"
 	End If
+	ShowMessage("Sheduling: " & strCommand)
+	WshShell.Run strCommand, 0, True
 End Function
 
 Function Quotes(strQuotes)
