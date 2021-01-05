@@ -498,7 +498,7 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	
 	' ShowMessage("Scheduling: " & taskActionPath & " " & taskActionArguments)
 	' If objFSO.FileExists(objFSO.BuildPath(strWinDir, "System32\schtasks.exe")) Then
-	If CInt(Left(strOSVer, InStr(strOSVer, "."))) > 6 Then
+	If CInt(Left(strOSVer, InStr(strOSVer, "."))) >= 6 Then
 		WshShell.Run "SCHTASKS.EXE /Delete /TN """ & objFSO.GetBaseName(taskActionPath) & """ /F", 0, True
 		strCommand = "SCHTASKS.EXE /Create /TN """ & objFSO.GetBaseName(taskActionPath) & """ /TR """ & strTempBat & """ /SC ONCE /ST " & taskTime & " /RU SYSTEM" & strRunLevel
 	Else
