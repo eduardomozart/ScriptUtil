@@ -480,7 +480,7 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	strOSVer = WshShell.RegRead("HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentVersion")
 	' https://superuser.com/questions/243605/how-do-i-specify-run-with-highest-privileges-in-schtasks
 	ShowMessage("System version detected: " & strOSVer)
-	If CInt(Left(strOSVer, InStr(strOSVer, "."))) > 6 Then strRunLevel = " /RL HIGHEST"
+	If CInt(Left(strOSVer, InStr(strOSVer, "."))) >= 6 Then strRunLevel = " /RL HIGHEST"
 	
 	Dim strWinDir : strWinDir = WshShell.ExpandEnvironmentStrings("%WinDir%")
 	Dim strTempDir : strTempDir = WshShell.ExpandEnvironmentStrings("%TEMP%")
