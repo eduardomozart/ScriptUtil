@@ -61,7 +61,7 @@ bin/
 ├─ 7za.dll
 ├─ 7zr.exe
 ├─ 7zsd_All.sfx
-├─ Resourcer.exe
+├─ rcedit-x86.exe
 uvnc2me_custom/
 ├─ main.ico
 ├─ uvnc2me.vbs
@@ -93,7 +93,7 @@ After creating the file tree structure above, there are two ways to create the S
 1. You can generate an SFX 7z file with a customizable SFX icon (optional) by running the batch file `` sfx_build.bat`` (command line). Please download and put the following files into ``bin\`` folder:
      - You'll need to download 7-Zip executable and dependencies (``7za.dll``, ``7zr.exe``). Acquiring these stuffs is easy: Just look for keyword **7-Zip Extra** from Version 9.20 on the [official download page](https://www.7-zip.org/download.html).
 	 - SFX module (``7zsd_All.sfx``) is available at [7z SFX Builder/3rdParty/Modules](https://sourceforge.net/p/s-zipsfxbuilder/code/ci/master/tree/3rdParty/Modules/).
-     - You can find ``Resourcer.exe`` (Anolis Resourcer) into it's [DeviantArt](https://www.deviantart.com/anolisfx/art/Anolis-Resourcer-116235998) page. After downloading, extract ``Resourcer.exe`` file into ``bin`` folder.
+     - You can find ``rcedit-x86.exe`` into it's [Release](https://github.com/electron/rcedit/releases) page. After downloading, extract ``Resourcer.exe`` file into ``bin`` folder.
 2. You can also open the file `` 7zsfxbuilder_uvnc2me_custom.txt`` via [7z SFX Builder](https://sourceforge.net/projects/s-zipsfxbuilder/) and generate the 7z SFX file through the graphical interface (GUI).
 
 ### 2. Executing Uvnc2me with Admin Desktop (UAC)
