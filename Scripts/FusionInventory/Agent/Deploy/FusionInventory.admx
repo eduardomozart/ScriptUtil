@@ -40,7 +40,7 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
 	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Logger" valueName="logger" />
 	    <text id="FusionInventory_NoCategory" valueName="no-category" />
-		<decimal id="FusionInventory_NoHTTPd" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoHTTPd" valueName="no-httpd" required="true" minValue="0" maxValue="1" storeAsText="true" />
 		<decimal id="FusionInventory_NoP2P" valueName="no-p2p" required="true" minValue="0" maxValue="1" storeAsText="true" />
 		<decimal id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_NoTask" valueName="no-task" />
@@ -78,7 +78,7 @@ xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions">
 	    <decimal id="FusionInventory_LogFileMaxSize" valueName="logfile-maxsize" required="true" minValue="1" storeAsText="true" />
 	    <text id="FusionInventory_Logger" valueName="logger" />
 	    <text id="FusionInventory_NoCategory" valueName="no-category" />
-		<decimal id="FusionInventory_NoHTTPd" valueName="html" required="true" minValue="0" maxValue="1" storeAsText="true" />
+		<decimal id="FusionInventory_NoHTTPd" valueName="no-httpd" required="true" minValue="0" maxValue="1" storeAsText="true" />
 		<decimal id="FusionInventory_NoP2P" valueName="no-p2p" required="true" minValue="0" maxValue="1" storeAsText="true" />
 		<decimal id="FusionInventory_NoSSLCheck" valueName="no-ssl-check" required="true" minValue="0" maxValue="1" storeAsText="true" />
 	    <text id="FusionInventory_NoTask" valueName="no-task" />
