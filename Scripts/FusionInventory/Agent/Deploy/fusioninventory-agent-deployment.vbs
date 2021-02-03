@@ -100,7 +100,7 @@ SetupVersion = "2.6"
 ' SetupLocation = "https://github.com/TECLIB/fusioninventory-agent-windows-installer/releases/download/" & SetupVersion
 'SetupLocation = "https://github.com/fusioninventory/fusioninventory-agent/releases/download/" & SetupVersion
 SetupLocation = "\\ad.example.com\SYSVOL\ad.example.com\Policies\{421703F7-008B-4105-AA4F-6D133FA3C131}\Machine\Scripts\Startup\FusionInventory-Agent"
-RemoveCIFSOpenFileSecurityWarning("ad.example.com")
+RemoveCIFSSetupLocationOpenFileSecurityWarning()
 
 ' SetupArchitecture
 '    The setup architecture can be 'x86', 'x64' or 'Auto'
@@ -370,16 +370,43 @@ Function ShowMessage(strMessage)
    End If
 End Function
 
-Function RemoveCIFSOpenFileSecurityWarning(strDomain)
-	Dim WshShell, strKeyPath, strValueName, dwValue
-	
-	Set WshShell = Wscript.CreateObject("WScript.shell")
+Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
+	Dim strDomain
+	If Not IsEmpty(GetSetupLocationNetworkPath) Then
+		Dim regEx, colMatches, objMatch
+		Set regEx = New RegExp
+		With regEx
+			.Global = True
+			.MultiLine = True
+			.IgnoreCase = True
+			.Pattern = "[^/\\\:\*\?\<\>\|]+"
+		End With
+		
+		If regEx.Test(GetSetupLocationNetworkPath) Then
+			Set colMatches = regEx.Execute(GetSetupLocationNetworkPath)
+			'\\192.168.2.8\NETLOGON\scripts
+			'0 = 192.168.2.8
+			'1 = NETLOGON
+			'2 = scripts
+			'Dim i
+			'For i = 0 To colMatches.Count-1
+			'	WScript.Echo colMatches.Item(i)
+			'Next
+			strDomain = colMatches.Item(0)
+		End If
+		
+		If Not IsEmpty(strDomain) Then
+			Dim WshShell, strKeyPath, strValueName, dwValue
+			
+			Set WshShell = Wscript.CreateObject("WScript.shell")
 
-	strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
-		& "ZoneMap\ESCDomains\" & strDomain
-	strValueName = "file"
-	dwValue = 1
-	WshShell.RegWrite strKeyPath & "\" & strValueName, dwValue, "REG_DWORD"
+			strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
+				& "ZoneMap\ESCDomains\" & strDomain
+			strValueName = "file"
+			dwValue = 1
+			WshShell.RegWrite strKeyPath & "\" & strValueName, dwValue, "REG_DWORD"
+		End If
+	End If
 End Function
 
 Function DeployFIServerCACert()
@@ -481,7 +508,7 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 	' https://superuser.com/questions/243605/how-do-i-specify-run-with-highest-privileges-in-schtasks
 	ShowMessage("System version detected: " & strOSVer)
 	If CInt(Left(strOSVer, InStr(strOSVer, "."))) >= 6 Then strRunLevel = " /RL HIGHEST"
-	
+
 	Dim strWinDir : strWinDir = WshShell.ExpandEnvironmentStrings("%WinDir%")
 	Dim strTempDir : strTempDir = WshShell.ExpandEnvironmentStrings("%TEMP%")
 	
@@ -507,8 +534,31 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 		'AT 03:05 /interactive /every:Su %BATCHROOT%\BANDSICH.BAT
 		strCommand = "AT.EXE " & taskTime & " " & strCmd & " /C """ & strTempBat & """"
 	End If
-	ShowMessage("Sheduling: " & strCommand)
+	ShowMessage("Scheduling: " & strCommand)
 	WshShell.Run strCommand, 0, True
+End Function
+
+Function GetSetupLocationNetworkPath
+	Dim strScriptPath
+	' strScriptPath = Left(WScript.ScriptFullName, Len(WScript.ScriptFullName) - Len(WScript.ScriptName)-1)
+	
+	Dim fs, d, dc, s, n
+	Set fs = CreateObject("Scripting.FileSystemObject")
+	Set dc = fs.Drives
+	For Each d in dc
+		If d.DriveType = 3 Then
+			' J: - \\192.168.2.8\NETLOGON
+			If (d.DriveLetter & ":" = fs.GetDriveName(SetupLocation)) Then
+				strScriptPath = d.ShareName
+			End If
+		End If
+	Next
+	
+	If IsEmpty(strScriptPath) Then
+		strScriptPath = fs.GetDriveName(SetupLocation)
+	End If
+	
+	GetSetupLocationNetworkPath = strScriptPath
 End Function
 
 Function Quotes(strQuotes)
