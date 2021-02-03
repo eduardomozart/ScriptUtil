@@ -8,7 +8,7 @@ It was modified to add the following features:
 
 1. Run the script elevated (as admin) through ``GetUAC()`` function.
 1. Modified the variable ``SetupLocation`` to use a UNC path.
-1. Remove "Open File Security Warning" to the specified UNC path through ``RemoveCIFSOpenFileWarning()`` function.
+1. Added ``GetSetupLocationNetworkPath()`` and ``RemoveCIFSSetupLocationOpenFileSecurityWarning()`` functions to detect if ``SetupLocation`` variable is into a CIFS (SMB) share and if it's a network share then ``RemoveCIFSSetupLocationOpenFileSecurityWarning()`` function add an exception to not show "Open File" warning when executing the FusionInventory Agent installer through a CIFS (SMB) share.
 1. Deploy FusionInventory for GLPI (Server) CA cert to the local computer (``C:\Program Files\FusionInventory-Agent\certs`` directory) through ``DeployFIServerCACert()`` function.
 1. Added sub procedure ``CreateDirs`` used by ``DeployFIServerCACert()`` function to create the certs folder several levels deep all in one go, if it doesn't exists.
 1. Modified the variable ``SetupOptions`` and appended the following parameters: ``/execmode``, ``/add-firewall-exception``, ``/debug``, ``/installtasks``, ``/no-p2p`` and ``/ca-cert-file``.
