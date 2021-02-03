@@ -371,7 +371,7 @@ Function ShowMessage(strMessage)
 End Function
 
 Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
-	Dim strDomain
+	Dim strRangeOrDomain
 	If Not IsEmpty(GetSetupLocationNetworkPath) Then
 		Dim regEx, colMatches, objMatch
 		Set regEx = New RegExp
@@ -392,19 +392,63 @@ Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
 			'For i = 0 To colMatches.Count-1
 			'	WScript.Echo colMatches.Item(i)
 			'Next
-			strDomain = colMatches.Item(0)
+			strRangeOrDomain = colMatches.Item(0)
 		End If
-		
-		If Not IsEmpty(strDomain) Then
-			Dim WshShell, strKeyPath, strValueName, dwValue
 			
-			Set WshShell = Wscript.CreateObject("WScript.shell")
+		If Not IsEmpty(strRangeOrDomain) Then
+			Dim objReg, strComputer
+			strComputer = "."
+			Set objReg = GetObject("winmgmts:{impersonationLevel=impersonate}!\\" & strComputer & "\root\default:StdRegProv")
+			Const HKEY_CLASSES_ROOT    = &H80000000
+			Const HKEY_CURRENT_USER    = &H80000001
+			Const HKEY_LOCAL_MACHINE   = &H80000002
 
-			strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
-				& "ZoneMap\ESCDomains\" & strDomain
-			strValueName = "file"
-			dwValue = 1
-			WshShell.RegWrite strKeyPath & "\" & strValueName, dwValue, "REG_DWORD"
+			Dim strKeyPath
+			
+			Set regEx = New RegExp
+			With regEx
+				.Global = True
+				.MultiLine = True
+				.IgnoreCase = True
+				.Pattern = "^(([0-9a-f]{0,4}:){1,7}[0-9a-f]{1,4}|([0-9]{1,3}\.){3}[0-9]{1,3})$"
+			End With
+			
+			' Detect IPv4/IPv6 addresses.
+			If regEx.Test(strRangeOrDomain) Then
+				strKeyPath = "Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
+					& "ZoneMap\Ranges"
+				
+				Dim arrSubKeysPath, strSubKeyPath
+				Dim strCurrentRangeKey, strCurrentRangeKeyValue
+				
+				objReg.EnumKey HKEY_CURRENT_USER, strKeyPath, arrSubKeysPath
+				' arrSubKeysPath(0) = Range1
+				' arrSubKeysPath(1) = Range2
+				' ...
+				For Each strSubKeyPath in arrSubKeysPath
+					strCurrentRangeKey = strKeyPath & "\" & strSubKeyPath
+					objReg.GetStringValue HKEY_CURRENT_USER, strCurrentRangeKey, ":Range", strCurrentRangeKeyValue
+					If (strCurrentRangeKeyValue = strRangeOrDomain) Then
+						' IP address already into Local Intranet zone. Nothing to do.
+						Exit Function
+					End If
+				Next
+				
+				' Adds IP address to Local Intranet zone.
+				Dim strNewRangeKeyPath
+				strNewRangeKeyPath = strKeyPath & "\Range" & (CInt(Right(arrSubKeysPath(UBound(arrSubKeysPath)), 1))+1)
+				objReg.CreateKey HKEY_CURRENT_USER, strNewRangeKeyPath
+				objReg.SetDWORDValue HKEY_CURRENT_USER, strNewRangeKeyPath, "*", 1
+				objReg.SetStringValue HKEY_CURRENT_USER, strNewRangeKeyPath, ":Range", strRangeOrDomain
+			Else
+				Dim strValueName, dwValue
+				
+				strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
+					& "ZoneMap\Domains\" & strRangeOrDomain
+				strValueName = "file"
+				dwValue = 1
+				WshShell.RegWrite strKeyPath & "\" & strValueName, dwValue, "REG_DWORD"
+			End If
 		End If
 	End If
 End Function
