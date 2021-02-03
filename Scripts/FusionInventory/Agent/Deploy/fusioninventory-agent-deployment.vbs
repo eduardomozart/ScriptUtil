@@ -441,7 +441,9 @@ Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
 				objReg.SetDWORDValue HKEY_CURRENT_USER, strNewRangeKeyPath, "*", 1
 				objReg.SetStringValue HKEY_CURRENT_USER, strNewRangeKeyPath, ":Range", strRangeOrDomain
 			Else
-				Dim strValueName, dwValue
+				Dim WshShell, strValueName, dwValue
+				
+				Set WshShell = Wscript.CreateObject("WScript.shell")
 				
 				strKeyPath = "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" _
 					& "ZoneMap\Domains\" & strRangeOrDomain
