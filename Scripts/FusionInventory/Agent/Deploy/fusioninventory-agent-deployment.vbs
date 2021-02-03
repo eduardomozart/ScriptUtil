@@ -539,9 +539,10 @@ Function TaskScheduler(taskActionPath, taskActionArguments, taskTime)
 End Function
 
 Function GetSetupLocationNetworkPath
-	Dim strScriptPath
+	Dim strScriptPath, strNetworkScriptPath
 	' strScriptPath = Left(WScript.ScriptFullName, Len(WScript.ScriptFullName) - Len(WScript.ScriptName)-1)
 	
+	' Checks to see if SetupLocation is a mapped network drive.
 	Dim fs, d, dc, s, n
 	Set fs = CreateObject("Scripting.FileSystemObject")
 	Set dc = fs.Drives
@@ -549,16 +550,17 @@ Function GetSetupLocationNetworkPath
 		If d.DriveType = 3 Then
 			' J: - \\192.168.2.8\NETLOGON
 			If (d.DriveLetter & ":" = fs.GetDriveName(SetupLocation)) Then
-				strScriptPath = d.ShareName
+				strNetworkScriptPath = d.ShareName
 			End If
 		End If
 	Next
 	
-	If IsEmpty(strScriptPath) Then
-		strScriptPath = fs.GetDriveName(SetupLocation)
+	' If SetupLocation is not a mapped network drive, assumes it's a CIFS share (e.g. \\192.168.2.8\NETLOGON).
+	If IsEmpty(strNetworkScriptPath) And Left(SetupLocation, 2) = "\\" Then
+		strNetworkScriptPath = SetupLocation
 	End If
 	
-	GetSetupLocationNetworkPath = strScriptPath
+	GetSetupLocationNetworkPath = strNetworkScriptPath
 End Function
 
 Function Quotes(strQuotes)
