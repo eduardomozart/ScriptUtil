@@ -425,14 +425,19 @@ Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
 				' arrSubKeysPath(0) = Range1
 				' arrSubKeysPath(1) = Range2
 				' ...
-				For Each strSubKeyPath in arrSubKeysPath
-					strCurrentRangeKey = strKeyPath & "\" & strSubKeyPath
-					objReg.GetStringValue HKEY_CURRENT_USER, strCurrentRangeKey, ":Range", strCurrentRangeKeyValue
-					If (strCurrentRangeKeyValue = strRangeOrDomain) Then
-						' IP address already into Local Intranet zone. Nothing to do.
-						Exit Function
-					End If
-				Next
+				If Not IsNull(arrSubKeysPath) Then
+					For Each strSubKeyPath in arrSubKeysPath
+						strCurrentRangeKey = strKeyPath & "\" & strSubKeyPath
+						objReg.GetStringValue HKEY_CURRENT_USER, strCurrentRangeKey, ":Range", strCurrentRangeKeyValue
+						If (strCurrentRangeKeyValue = strRangeOrDomain) Then
+							' IP address already into Local Intranet zone. Nothing to do.
+							Exit Function
+						End If
+					Next
+				Else
+					ReDim arrSubKeysPath(0)
+					arrSubKeysPath(0) = Array("Range0")
+				End If
 				
 				' Adds IP address to Local Intranet zone.
 				Dim strNewRangeKeyPath
