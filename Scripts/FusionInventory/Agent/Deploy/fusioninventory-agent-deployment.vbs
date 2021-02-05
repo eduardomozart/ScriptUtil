@@ -436,7 +436,7 @@ Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
 					Next
 				Else
 					ReDim arrSubKeysPath(0)
-					arrSubKeysPath(0) = Array("Range0")
+					arrSubKeysPath(0) = "Range0"
 				End If
 				
 				' Adds IP address to Local Intranet zone.
