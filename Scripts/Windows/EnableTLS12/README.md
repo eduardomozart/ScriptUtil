@@ -1,4 +1,4 @@
-# EnableTLS12
+# Enable TLS 1.2
 
 Windows Vista/7/Server 2008 does not properly support TLS 1.1 and TLS 1.2 HTTPS connections. This can cause issues not just with the built in Internet Explorer web browser, but also with any apps that rely on the Windows networking components when connecting to servers configured to only accept TLS 1.1+ connections.
 
