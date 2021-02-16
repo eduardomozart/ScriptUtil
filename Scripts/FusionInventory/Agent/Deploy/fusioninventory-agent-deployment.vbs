@@ -440,10 +440,11 @@ Function RemoveCIFSSetupLocationOpenFileSecurityWarning()
 				End If
 				
 				' Adds IP address to Local Intranet zone.
+				' Apparently Windows XP ignores Ranges created dynamically via script
 				Dim strNewRangeKeyPath
 				strNewRangeKeyPath = strKeyPath & "\Range" & (CInt(Right(arrSubKeysPath(UBound(arrSubKeysPath)), 1))+1)
 				objReg.CreateKey HKEY_CURRENT_USER, strNewRangeKeyPath
-				objReg.SetDWORDValue HKEY_CURRENT_USER, strNewRangeKeyPath, "*", 1
+				objReg.SetDWORDValue HKEY_CURRENT_USER, strNewRangeKeyPath, "file", 1
 				objReg.SetStringValue HKEY_CURRENT_USER, strNewRangeKeyPath, ":Range", strRangeOrDomain
 			Else
 				Dim WshShell, strValueName, dwValue
