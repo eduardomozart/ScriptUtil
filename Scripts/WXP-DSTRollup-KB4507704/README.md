@@ -15,3 +15,20 @@ S:\wsusofflinewxp\client\cmd\custom
    windows6.0-kb4507704-x86_2cad8cde026c6ae1218bdc7dee5aa63e760d4c61.msu
    Windows2000-WindowsXP-WindowsServer2003-KB4507704-custom-x86-x64-enu.reg
 ```
+
+## Instructions
+
+If you use WSUS Offline Update 9.5.2 to update Windows XP / Server 2003 operating systems offline, do the following:
+
+1. Download all available updates for Windows Vista (w60 / w60-x64) through the WSUS 9.5.2 offline update
+1. Save the files ``DSTRollup.bat`` and ``Windows2000-WindowsXP-WindowsServer2003-KB4507704-custom-x86-x64-enu.reg`` in the ``client\cmd\custom`` directory
+1. Save the files ``windows6.0-kb4507704-x64_a277d9fcb7b776a13e855987be3e5bea1e5fee61.msu`` and ``windows6.0-kb4507704-x86_2cad8cde026c6ae1218bdc7dee5aa63e760d4c61.msu`` in the ``client\cmd\custom`` directory
+1. Navigate to the ``client\cmd\custom`` directory and rename the ``InitializationHook.cmdt`` file to ``InitializationHook.cmd``
+1. Add the following content to the ``InitializationHook.cmd`` file:
+
+```
+@echo off
+pushd "% ~ dp0"
+call DSTRollup.bat
+popd
+```
