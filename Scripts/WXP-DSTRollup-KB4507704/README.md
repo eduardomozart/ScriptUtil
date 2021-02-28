@@ -28,7 +28,7 @@ If you use WSUS Offline Update 9.5.2 to update Windows XP / Server 2003 operatin
 
 ```
 @echo off
-pushd "% ~ dp0"
+pushd "%~dp0"
 call DSTRollup.bat
 popd
 ```
