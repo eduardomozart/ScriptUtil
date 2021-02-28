@@ -18,7 +18,7 @@ S:\wsusofflinewxp\client\cmd\custom
 
 ## Instructions
 
-If you use WSUS Offline Update 9.5.2 to update Windows XP / Server 2003 operating systems offline, do the following:
+If you use WSUS Offline Update 9.5.2 to update Windows XP / Server 2003 / Vista / Server 2008 operating systems offline, do the following:
 
 1. Download all available updates for Windows Vista (w60 / w60-x64) through the WSUS 9.5.2 offline update
 1. Save the files ``DSTRollup.bat`` and ``Windows2000-WindowsXP-WindowsServer2003-KB4507704-custom-x86-x64-enu.reg`` in the ``client\cmd\custom`` directory
