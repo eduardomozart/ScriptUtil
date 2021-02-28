@@ -1,0 +1,20 @@
+Windows Registry Editor Version 5.00
+
+
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\Central Brazilian Standard Time\Dynamic DST]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\E. South America Standard Time\Dynamic DST]
+[-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\Morocco Standard Time\Dynamic DST]
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\E. South America Standard Time]
+"TZI"=hex:b4,00,00,00,00,00,00,00,c4,ff,ff,ff,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Time Zones\Morocco Standard Time]
+"Display"="(GMT+01:00) Casablanca"
+"Dlt"="Morocco Daylight Time"
+"Std"="Morocco Standard Time"
+"MapID"="-1,66"
+"Index"=dword:00000071
+"TZI"=hex:c4,ff,ff,ff,00,00,00,00,c4,ff,ff,ff,00,00,00,00,00,00,00,00,00,00,00,\
+  00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
+
