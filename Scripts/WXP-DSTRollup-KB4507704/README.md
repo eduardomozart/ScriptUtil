@@ -1,4 +1,4 @@
-# Enable TLS 1.2
+# DST Rollup (KB4507704)
 
 Earlier versions of Windows continue to delay the clock by one hour (Brasilia time) as they no longer receive time zone updates. 
 
