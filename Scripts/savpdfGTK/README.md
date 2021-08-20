@@ -88,9 +88,13 @@ You must log out and relogin to start the script.
 
 ## License
 Program: savpdf
+
 Version: 0.002
+
 BSD 2-Clause
-Copyright (c) 2015, Holger Rückershäuser
+
+Copyright (c) 2015, [Holger Rückershäuser](https://web.archive.org/web/20190424073557/http://holgerrpl.tk/save-as-dialog-for-cups-pdf/)
+
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
