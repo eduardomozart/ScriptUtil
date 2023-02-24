@@ -1,8 +1,8 @@
 # Enable TLS 1.2
 
-Windows Vista/7/Server 2008 does not properly support TLS 1.1 and TLS 1.2 HTTPS connections. This can cause issues not just with the built in Internet Explorer web browser, but also with any apps that rely on the Windows networking components when connecting to servers configured to only accept TLS 1.1+ connections.
+Windows Vista/7/Server 2008 does not properly support TLS 1.1 and TLS 1.2 HTTPS connections and Windows Server 2012 R2 do not properly support TLS 1.2 HTTPS connections. This can cause issues not just with the built in Internet Explorer web browser, but also with any apps that rely on the Windows networking components when connecting to servers configured to only accept TLS 1.1+ connections.
 
-This script will enable TLS 1.0/1.1/1.2 and disable SSL 2.0/3.0 for Windows Vista/Server 2008 SP2 and Windows 7/Server 2008 R2 SP1 using the [KB4056564](https://www.catalog.update.microsoft.com/Search.aspx?q=KB4056564) update patch for Windows Server 2008 (Windows Vista) and [KB3140245](https://www.catalog.update.microsoft.com/Search.aspx?q=KB3140245) update patch for Windows 7/Server 2008 R2. You can download these updates through the [Microsoft Update Catalog](https://www.catalog.update.microsoft.com).
+This script will enable TLS 1.0/1.1/1.2 and disable SSL 2.0/3.0 for Windows Vista/Server 2008 SP2, Windows 7/Server 2008 R2 SP1 and Windows Server 2012 R2 using the [KB4056564](https://www.catalog.update.microsoft.com/Search.aspx?q=KB4056564) update patch for Windows Server 2008 (Windows Vista) and [KB3140245](https://www.catalog.update.microsoft.com/Search.aspx?q=KB3140245) update patch for Windows 7/Server 2008 R2. You can download these updates through the [Microsoft Update Catalog](https://www.catalog.update.microsoft.com).
 
 You can use this script to enable TLS 1.1/1.2 in bulk on your internal network through Active Directory Computer Startup Scripts (GPO).
 
@@ -31,6 +31,6 @@ You can change the value of some variables in the script to suit your environmen
 
 ## Logging
 
-By default, this script records it's operation in the ``%TEMP%\EnableTLS12.vbs`` and ``%TEMP%\EnableTLS12-install_msu.log`` files (e.g. ``C:\Users\Administrator\AppData\Local\Temp``).
+By default, this script records it's operation in the ``%TEMP%\EnableTLS12.log`` and ``%TEMP%\EnableTLS12-install_msu.log`` files (e.g. ``C:\Users\Administrator\AppData\Local\Temp``).
 
 Please attach these files when opening an Issue on GitHub to make it possible to identify the possible cause of your problem.

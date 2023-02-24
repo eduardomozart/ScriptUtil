@@ -12,13 +12,13 @@
 '	* Eduardo Mozart de Oliveira (2021)
 '
 Option Explicit
-On Error Resume Next
+' On Error Resume Next
 
 Dim objFSO : Set objFSO = CreateObject("Scripting.FileSystemObject")
 Dim intSystemFolder, intTempFolder, intWindowsFolder
+intWindowsFolder = 0 ' The root folder of the Windows system folder tree (C:\Windows or C:\WINNT)
 intSystemFolder = 1 ' The Windows system folder (C:\Windows\system or C:\Windows\system32)
 intTempFolder = 2 ' The folder that stores temporary files (%TEMP%)
-intWindowsFolder = 3 ' The root folder of the Windows system folder tree (C:\Windows or C:\WINNT)
 
 Dim strScriptDir : strScriptDir = objFSO.GetParentFolderName(WScript.ScriptFullName)
 
@@ -37,35 +37,42 @@ If Not objFSO.FolderExists(LOG_PATH) Then
 End If
 
 Dim strLogFileName : strLogFileName = objFSO.BuildPath(LOG_PATH, objFSO.GetBaseName(LOGNAME) & ".log")
+Dim boolLogFileExists : boolLogFileExists = objFSO.FileExists(strLogFileName)
 Dim objLogFile : Set objLogFile = objFSO.OpenTextFile(strLogFileName, 8, True)
-If objFSO.FileExists(strLogFileName) Then objLogFile.WriteLine vbCrLf & "-------------------------------------------------------------------------------"
+If boolLogFileExists Then objLogFile.WriteLine vbCrLf & "-------------------------------------------------------------------------------"
 
-Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
+Dim objWMIService : Set objWMIService = GetObject("winmgmts:{impersonationLevel=impersonate}!\\" & strComputer & "\root\cimv2")
+Dim OSs : Set OSs = objWMIService.ExecQuery ("SELECT * FROM Win32_OperatingSystem")
 
-Dim strWinVer, strWinVerBuild, strWinVerMajor, strWinVerMinor
-strWinVer = WshShell.RegRead("HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentVersion") ' Windows 7 = 6.1
-strWinVerBuild = WshShell.RegRead("HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\CurrentBuild") ' Windows 7 = 7601 (SP1)
-strWinVerMajor = Left(strWinVer, 1) ' 6
-strWinVerMinor = Right(strWinVer, 1) ' 1
+Dim OS, strWinVer, arrWinVer, strWinVerMajor, strWinVerMinor, strWinVerBuild
+Dim boolIsWindows60, boolIsWindows60SP2, boolIsWindows61, boolIsWindows61SP1, boolIsWindows63
+For Each OS in OSs
+	strWinVer = OS.Version ' Windows Server 2012 R2 = 6.3.9600
+	arrWinVer = Split(strWinVer, ".")
+	strWinVerMajor = arrWinVer(0) ' 6
+	strWinVerMinor = arrWinVer(1) ' 3
+	strWinVerBuild = arrWinVer(2) ' 9600
 
-Dim boolIsWindows60, boolIsWindows60SP2, boolIsWindows61, boolIsWindows61SP1
-boolIsWindows60 = CBool(CInt(strWinVerMajor) = 6 And CINt(strWinVerMinor) = 0) ' Windows Vista/Server 2008
-boolIsWindows60SP2 = CBool(boolIsWindows60 And CInt(strWinVerBuild) >= 6002) ' Windows Vista/Server 2008 SP2
-boolIsWindows61 = CBool(CInt(strWinVerMajor) = 6 And CINt(strWinVerMinor) = 1) ' Windows 7/Server 2008 R2
-boolIsWindows61SP1 = CBool(boolIsWindows61 And CInt(strWinVerBuild) >= 7601) ' Windows 7/Server 2008 R2 SP1
+	boolIsWindows60 = CBool(CInt(strWinVerMajor) = 6 And CINt(strWinVerMinor) = 0) ' Windows Vista/Server 2008
+	boolIsWindows60SP2 = CBool(boolIsWindows60 And CInt(strWinVerBuild) >= 6002) ' Windows Vista/Server 2008 SP2
+	boolIsWindows61 = CBool(CInt(strWinVerMajor) = 6 And CINt(strWinVerMinor) = 1) ' Windows 7/Server 2008 R2
+	boolIsWindows61SP1 = CBool(boolIsWindows61 And CInt(strWinVerBuild) >= 7601) ' Windows 7/Server 2008 R2 SP1
+	boolIsWindows63 = CBool(CInt(strWinVerMajor) = 6 And CINt(strWinVerMinor) = 3 And CInt(strWinVerBuild) >= 9600) ' Windows Server 2012 R2
+Next
 
 objLogFile.WriteLine Now & " - " & "Starting Script: " & WScript.ScriptFullName
-objLogFile.WriteLine Now & " - " & "Found Microsoft Windows version " & strWinver & "." & strWinVerBuild
+objLogFile.WriteLine Now & " - " & "Found Microsoft Windows version " & strWinver
 
 ' objLogFile.WriteLine Now & " - " & "strWinVer: " & strWinVer
-' objLogFile.WriteLine Now & " - " & "strWinVerBuild: " & strWinVerBuild
 ' objLogFile.WriteLine Now & " - " & "strWinVerMajor: " & strWinVerMajor
 ' objLogFile.WriteLine Now & " - " & "strWinVerMinor: " & strWinVerMinor
+' objLogFile.WriteLine Now & " - " & "strWinVerBuild: " & strWinVerBuild
 
 ' objLogFile.WriteLine Now & " - " & "boolIsWindows60: " & boolIsWindows60
 ' objLogFile.WriteLine Now & " - " & "boolIsWindows60SP2: " & boolIsWindows60SP2
 ' objLogFile.WriteLine Now & " - " & "boolIsWindows61: " & boolIsWindows61
 ' objLogFile.WriteLine Now & " - " & "boolIsWindows61SP1: " & boolIsWindows61SP1
+' objLogFile.WriteLine Now & " - " & "boolIsWindows63: " & boolIsWindows63
 
 Main
 
@@ -81,7 +88,9 @@ Sub Main
 		strComputer = "."
 	End If
 	
-	If boolIsWindows61 Then ' Windows 7/Server 2008 R2
+	If boolIsWindows63 Then
+		EnableTLS12()
+	ElseIf boolIsWindows61 Then ' Windows 7/Server 2008 R2
 		strHotfixID = "3140245"
 		If (CheckOSType() = "x86") Then strHotFixFileName = "windows6.1-kb3140245-x86_cdafb409afbe28db07e2254f40047774a0654f18.msu"
 		If (CheckOSType() = "x64") Then strHotFixFileName = "windows6.1-kb3140245-x64_5b067ffb69a94a6e5f9da89ce88c658e52a0dec0.msu"
@@ -95,8 +104,8 @@ Sub Main
 		If (CheckOSType() = "x86") Then strHotFixFileName = "windows6.0-kb4056564-v2-x86_1cf1b27424b4017e5f1341d88b42c463a62e1ac8.msu"
 		If (CheckOSType() = "x64") Then strHotFixFileName = "windows6.0-kb4056564-v2-x64_173bf5ef3e4cfba4c43899d8db9f25c6dcccab22.msu"
 		If Not boolIsWindows60SP2 Then
-			WScript.Echo "[" & WScript.ScriptName & "] Please install Service Pack 2 (SP1) before installing KB" & strHotFixID & "."
-			objLogFile.WriteLine Now & " - " & "Please install Service Pack 2 (SP1) before installing KB" & strHotFixID & "."
+			WScript.Echo "[" & WScript.ScriptName & "] Please install Service Pack 2 (SP2) before installing KB" & strHotFixID & "."
+			objLogFile.WriteLine Now & " - " & "Please install Service Pack 2 (SP2) before installing KB" & strHotFixID & "."
 			WScript.Quit(1)
 		End If
 	End If
@@ -114,7 +123,7 @@ Sub Main
 			Else
 				objLogFile.WriteLine Now & " - The Microsoft KB" & strHotFixID & " is NOT installed."
 				Dim intMsuExitCode : intMsuExitCode = InstallMSU(objFSO.BuildPath(strHotFixFolderPath, strHotFixFileName))
-				If intMsuExitCode <> 0 And intMsuExitCode <> 3010 And intMsuExitCode <> 2359302 Then
+				If intMsuExitCode <> 0 And intMsuExitCode <> 3010 And intMsuExitCode <> 3011 And intMsuExitCode <> 2359302 Then
 					WScript.Echo "[" & WScript.ScriptName & "] InstallMSU MsuExitCode: " & intMsuExitCode
 					WScript.Quit(2)
 				End If
@@ -169,6 +178,7 @@ Private Function EnableTLS12()
 		' By default, after installing KB4056564, TLS 1.1/1.2 options are NOT shown into Windows Internet Explorer.
 		' Deleting these keys below make TLS 1.1/1.2 options appears at Windows Internet Explorer 'Advanced' tab. 
 		On Error Resume Next
+		Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
 		WshShell.RegDelete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\AdvancedOptions\CRYPTO\TLS1.1\OSVersion"
 		WshShell.RegDelete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Internet Explorer\AdvancedOptions\CRYPTO\TLS1.2\OSVersion"
 		If (CheckOSType() = "x64") Then
@@ -177,10 +187,12 @@ Private Function EnableTLS12()
 		End If
 		On Error GoTo 0
 		
+		' Change Windows Internet Explorer settings to disable SSL 2.0/3.0 and enable TLS 1.1/1.2 (REG_DWORD: a80).
+		' It's not required on Windows 7/Server 2008 R2 because Internet Explorer 11 is enabled for TLS 1.1/1.2 by default.
+		RegWrite "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings\SecureProtocols", 2688, "REG_DWORD"
+		
 		' Active Setup (Run once on every user logon).
 		' https://stackoverflow.com/questions/45758403/active-setup-script-to-edit-file-not-running-working
-		' Change Windows Internet Explorer settings to disable SSL 2.0/3.0 and enable TLS 1.1/1.2 (REG_DWORD: a80).
-		' It's not necessary on Windows 7/Server 2008 R2 because KB3140245 changes it automatically.
 		
 		' Please increase Version value if you change StubPath value.
 		' RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components\EnableTLS12", "Enable TLS 1.2", "REG_SZ"
@@ -249,8 +261,10 @@ Private Function CheckParticularHotfix(strComputer, strHotfixID)
 		CheckParticularHotfix = "Unable to get WMI hotfix information."
 	Else 'Error number 0 meaning no error occured 
 		If colQuickFixes.Count > 0 Then
+			objLogFile.WriteLine Now & " - Ending CheckParticularHotfix(). [True]"
 			CheckParticularHotfix = True	'HF installed
 		Else 
+			objLogFile.WriteLine Now & " - Ending CheckParticularHotfix(). [False]"
 			CheckParticularHotfix = False	'HF not installed
 		End If
 	End If
@@ -258,7 +272,6 @@ Private Function CheckParticularHotfix(strComputer, strHotfixID)
 	
 	Err.Clear
 	On Error GoTo 0
-	objLogFile.WriteLine Now & " - Ending CheckParticularHotfix()."
 End Function
 
 '------------------------------------------------------
@@ -310,7 +323,7 @@ Function CheckOSType()
 		msOSType = "x64"
     End If
     
-	' objLogFile.WriteLine Now & " - Ending CheckOSType()."
+	' objLogFile.WriteLine Now & " - Ending CheckOSType(). [" & msOSType & "]"
 	CheckOSType = msOSType
 End Function
 
@@ -320,25 +333,26 @@ End Function
 '------------------------------------------------------
 Function InstallMSU(strMsuName)
     objLogFile.WriteLine Now & " - Starting InstallMSU(" & strMsuName & ")."
+	Dim WshShell : Set WshShell = CreateObject("WScript.Shell")
 
 	If StartService("wuauserv") Then
-	    objLogFile.WriteLine Now & " - Command line launched: wusa.exe """ & strMsuName & """ /quiet /norestart /log:""" & LOG_PATH & "\" & LOGNAME & "-install_msu.log"""
+	    Dim strWusaCmd : strWusaCmd = "wusa.exe """ & strMsuName & """ /quiet /norestart"
+	    If boolIsWindows61 Then strWusaCmd = strWusaCmd & " /log:""" & LOG_PATH & "\" & LOGNAME & "-install_msu.log"""
+	    objLogFile.WriteLine Now & " - Command line launched: " & strWusaCmd	    
+
+	    Dim intMsuExitCode : intMsuExitCode = WshShell.Run(strWusaCmd, 0, TRUE)
 	    
-	    Dim intMsuExitCode : intMsuExitCode = WshShell.Run("wusa.exe """ & strMsuName & """ /quiet /norestart /log:""" & LOG_PATH & "\" & LOGNAME & "-install_msu.log""", 0, TRUE)
-	    
-	    If Err.Number <> 0 Then
-	        objLogFile.WriteLine Now & " - " & "InstallMSU GeneralError: " & Err.Description & "(" & Err.Number & ")."
-	    End If
-	    
-		' 3010 = Reboot required.
-		' 2359302 = Update already installed.
-		objLogFile.WriteLine Now & " - " & "InstallMSU MsuExitCode: " & intMsuExitCode
+	    ' If Err.Number <> 0 Then
+	    '    objLogFile.WriteLine Now & " - " & "InstallMSU Errorlevel: " & Err.Description & "(" & Err.Number & ")."
+	    ' End If
 	Else
-		objLogFile.WriteLine Now & " - " & "Service ""Windows Update"" (wuauserv) is disabled." & "Please enable it and try again."
+		objLogFile.WriteLine Now & " - " & "ERROR: Service ""Windows Update"" (wuauserv) is disabled." & "Please enable it and try again."
 		intMsuExitCode = 1058
 	End If
-    
-    objLogFile.WriteLine Now & " - Ending InstallMSU()."
+    	
+	' 3010/3011 = Reboot required.
+	' 2359302 = Update already installed.
+	objLogFile.WriteLine Now & " - Ending InstallMSU(). [" & intMsuExitCode & "]"
     
 	InstallMSU = intMsuExitCode
 End Function
@@ -361,12 +375,13 @@ Function StopService(strServiceName)
         End If
         ' objService.ChangeStartMode("Disabled")
         Wscript.Sleep 5000
-		objLogFile.WriteLine Now & " - Ending StopService(" & strServiceName & ")."
-		If objService.Stopped Then
-			StopService = True
-		Else
-			StopService = False
-		End If
+	If objService.Stopped Then
+		objLogFile.WriteLine Now & " - Ending StopService(" & strServiceName & "). [True]"
+		StopService = True
+	Else
+		objLogFile.WriteLine Now & " - Ending StopService(" & strServiceName & "). [False]"
+		StopService = False
+	End If
     Next
 End Function
 
@@ -388,11 +403,12 @@ Function StartService(strServiceName)
         End If
         ' objService.ChangeStartMode("Manual")
         Wscript.Sleep 5000
-		objLogFile.WriteLine Now & " - Ending StartService(" & strServiceName & ")."
-		If objService.Started Then
-			StartService = True
-		Else
-			StartService = False
-		End If
+	If objService.Started Then
+		objLogFile.WriteLine Now & " - Ending StartService(" & strServiceName & "). [True]"
+		StartService = True
+	Else
+		objLogFile.WriteLine Now & " - Ending StartService(" & strServiceName & "). [False]"
+		StartService = False
+	End If
     Next
 End Function
