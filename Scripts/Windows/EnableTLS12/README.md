@@ -11,7 +11,7 @@ Please note that this script is distributed AS IS with the intention to be usefu
 ## Directory Structure
 
 ```
-\\AD.EXAMPLE.COM\NETLOGON\ENABLETLS12
+\\AD.EXAMPLE.COM\NETLOGON\EnableTLS12
    EnableTLS12.vbs
    windows6.0-kb4056564-v2-x64_173bf5ef3e4cfba4c43899d8db9f25c6dcccab22.msu
    windows6.0-kb4056564-v2-x86_1cf1b27424b4017e5f1341d88b42c463a62e1ac8.msu
