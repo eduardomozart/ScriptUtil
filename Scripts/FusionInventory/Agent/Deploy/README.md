@@ -31,10 +31,11 @@ It was modified to add the following features:
 
 Please read "[Déployer l’agent Fusion Inventory par GPO](https://www.it-connect.fr/deployer-lagent-fusion-inventory-par-gpo/)" (French) for instructions on how to configure the FusionInventory Agent using Group Policy.
 
+1. Create the directory ``C:\Windows\SYSVOL\sysvol\[DomainName]\Policies\PolicyDefinitions``.
 1. Copy the file "FusionInventory.admx" to ``PolicyDefinitions`` directory.
 1. Copy the file "FusionInventory.adml" to ``PolicyDefinitions\en-US`` subdirectory.
 
-Sample configuration:
+Sample GPO configuration:
 
 ```
 Collect Timeout  180 
@@ -66,3 +67,9 @@ Tasks
 Timeout  180 
 User 
 ```
+
+## ToDo
+
+1. Edit the FusionInventory installation VBS script to include a directory called "FusionInventory-Agent" and copy the entire contents of that directory to the FusionInventory-Agent installation directory (by default ``C:\Program Files\FusionInventory- Agent``) to allow replacing modules on-the-fly.
+1. Move the ``DeployCert`` function to the script logic, so that the certificate file is copied only when performing the FusionInventory installation.
+1. Edit the FusionInventory GPO with WMI filters so that the GPO does not create the ``HKEY_LOCAL_MACHINE\Software\Wow6432Node\FusionInventory-Agent`` key on Windows 64-bit systems.
