@@ -20,6 +20,6 @@ These modules should work on other OSes compatibles with GLPI Agent (not only Wi
 
 # Tested on
 
-  * GLPI Agent 1.7.3 (Windows/x64)
+  * GLPI Agent 1.7.3/FusionInventory 2.6.0 (Windows/x64)
   * GSTI 9.5.12
     
