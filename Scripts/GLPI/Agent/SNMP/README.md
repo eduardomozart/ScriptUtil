@@ -14,7 +14,7 @@ Displays used RAM on "FusionInventory SNMP" tab (GLPI 9.5) for Cisco Switches.
 
 There's no need to compile GLPI/FusionInventory Agent as those files are compiled on-the-fly.
 
-You just need to copy the desired ``*.pm`` file to ``C:\Program Files\GLPI-Agent\perl\agent\GLPI\Agent\SNMP\MibSupport``
+You just need to copy the desired ``MibSupport\*.pm`` file to ``C:\Program Files\GLPI-Agent\perl\agent\GLPI\Agent\SNMP\MibSupport``
 
 These modules should work on other OSes compatibles with GLPI Agent (not only Windows).
 
