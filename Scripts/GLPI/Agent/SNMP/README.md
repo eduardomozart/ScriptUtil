@@ -47,6 +47,38 @@ You just need to copy the desired ``MibSupport\*.pm`` file to ``C:\Program Files
 
 These modules should work on other OSes compatibles with GLPI Agent (not only Windows).
 
+## Module debugging/troubleshoot
+
+You can debug these module without forcing a full inventory by running the GLPI Agent executables directly.
+
+Example:
+
+```
+C:\Program Files\GLPI-Agent>"C:\Program Files\GLPI-Agent\glpi-netinventory.bat" --host 192.168.0.33 --credentials version:2c,community:public --debug > %temp%\cisco.ocs
+[debug] Current netinventory run expiration timeout: 1.0 hour
+[debug] using 1 netinventory worker
+[debug] #1, full snmp scan of 192.168.0.33 with credentials 1
+[debug] #1, full match for sysobjectID .1.3.6.1.4.1.9.1.1316 in database
+[debug] #1, sysobjectID match: cisco mib support enabled
+[debug] #1, PrivateOID match: cisco-port-security mib support enabled
+[debug] #1, sysobjectID match: cisco mib support enabled
+[debug] #1, switching SNMP context to vlan 99
+[debug] #1, Cisco Free RAM: 35382792
+[debug] #1, Cisco Used RAM: 28272320
+[debug] #1, Cisco MEMORY: 35
+[debug] #1, Cisco RAM: 64
+[debug] #1, Netinventory worker terminated
+
+```
+
+Check if the ``%temp%\cisco.ocs`` file contains both ``<RAM></RAM>`` and ``<MEMORY></MEMORY>`` XML tags as expected. The debug output isn't printed on the ``cisco.ocs`` file, only on the ``CMD`` prompt.
+
+You can inject the switch device inventory on GLPI by running:
+
+```
+C:\Program Files\GLPI-Agent>"C:\Program Files\GLPI-Agent\glpi-injector.bat" --file %temp%\cisco.ocs --url https://glpi.example.com/plugins/fusioninventory/ --verbose
+```
+
 # Tested on
 
   * GLPI Agent 1.7.3 (Windows/x64)
