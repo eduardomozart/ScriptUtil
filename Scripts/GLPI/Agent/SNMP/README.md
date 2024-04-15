@@ -4,7 +4,7 @@ This repo stores additional modules for GLPI Agent.
 
 ## Modules
 
-### CiscoRAM
+### [CiscoRAM](MibSupport/CiscoRAM.pm)
 
 Displays used RAM on "FusionInventory SNMP" tab (GLPI 9.5) for Cisco Switches.
 
