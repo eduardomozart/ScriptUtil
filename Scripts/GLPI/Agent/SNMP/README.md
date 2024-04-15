@@ -71,7 +71,7 @@ C:\Program Files\GLPI-Agent>"C:\Program Files\GLPI-Agent\glpi-netinventory.bat" 
 
 ```
 
-Check if the ``%temp%\cisco.ocs`` file contains both ``<RAM></RAM>`` and ``<MEMORY></MEMORY>`` XML tags as expected. The debug output isn't printed on the ``cisco.ocs`` file, only on the ``CMD`` prompt.
+Check if the ``%temp%\cisco.ocs`` file contains both ``<RAM></RAM>`` and ``<MEMORY></MEMORY>`` XML tags as expected. The debug output isn't printed on the ``cisco.ocs`` file, only on the ``CMD`` prompt. The pipe redirects only the inventory data to ``cisco.ocs`` file.
 
 You can inject the switch device inventory on GLPI by running:
 
