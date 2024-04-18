@@ -58,11 +58,12 @@ sub run {
 	}
 	$device->{logger}->debug("Cisco Used RAM (Bytes): " . $ramUsed);
 		
-	my $ramTotal = sprintf "%.0f", ($ramFree + $ramUsed) / (1000 * 1000);
-	$device->{logger}->debug("Cisco Free + Used RAM alloc. (Mio): " . $ramTotal);
+	my $ramTotal = $ramFree + $ramUsed;
+	my $ramTotalMio = sprintf "%.0f", $ramTotal / (1000 * 1000);
+	$device->{logger}->debug("Cisco Free + Used RAM alloc. (Mio): " . $ramTotalMio);
 	
 	# $device->{INFO}->{MEMORY} = int($ramFree / (1000 * 1000))
-	$device->{INFO}->{MEMORY} = int(($ramFree / ($ramFree + $ramUsed)) * 100)
+	$device->{INFO}->{MEMORY} = int(($ramFree / $ramTotal) * 100)
 		if defined($ramFree) && isInteger($ramFree) && defined($ramUsed) && isInteger($ramUsed);
 	$device->{logger}->debug("Cisco Used RAM alloc. (%) [MEMORY]: " . $device->{INFO}->{MEMORY});
 	
