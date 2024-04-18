@@ -10,7 +10,7 @@ The intention is to provide accurate CPU and RAM usage on "FusionInventory SNMP"
 
 ### [CiscoRAM](MibSupport/CiscoRAM.pm)
 
-Displays used RAM (%) on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for Cisco Switches.
+Displays **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for Cisco Switches.
 
 It works by querying the [CISCO-MEMORY-POOL](https://oidref.com/1.3.6.1.4.1.9.9.48.1.1) MIB.
 
@@ -22,7 +22,11 @@ C:\Program Files\GLPI-Agent>snmpwalk -v 2c -c public 192.168.0.33 .1.3.6.1.4.1.9
 
 ### [HH3CComware](MibSupport/H3CComware.pm)
 
-Displays used CPU and RAM (%) on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for H3C HP Comware HH3C Switches.
+Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for H3C HP Comware HH3C Switches.
+
+### [ArubaCPURAM](MibSupport/ArubaCPURAM.pm)
+
+Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for H3C HP Comware HH3C Switches.
 
 ## How to install
 
