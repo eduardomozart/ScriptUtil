@@ -79,7 +79,7 @@ sub run {
 		# size based on that. E.g. If more than 64Mio is allocated
 		# to the system, it will set RAM to 128Mio.
 		my $power = 1;
-		while($power < $ramTotal) {
+		while($power < $ramTotalMio) {
 			$power*=2;
 		}
 	
