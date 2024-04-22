@@ -26,7 +26,11 @@ Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM u
 
 ### [ArubaCPURAM](MibSupport/ArubaCPURAM.pm)
 
-Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for H3C HP Comware HH3C Switches.
+Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for Aruba APs.
+
+### [UbntCPURAM](MibSupport/UbntCPURAM.pm)
+
+Displays **Memory** on "Network device" tab and **CPU usage (in %)** and **RAM usage (in %)** on "GLPI Agent SNMP" tab (GLPI 10 with [swcpuram](https://github.com/eduardomozart/swcpuram) plug-in) for UniFi APs.
 
 ## How to install
 
