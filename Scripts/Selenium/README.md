@@ -1,6 +1,4 @@
-# F5 VPN HTML Login Automation
-
-I created this Python code to be able to automate F5 VPN Web login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
+# Python Selenium
 
 ## Dependencies
 
@@ -11,10 +9,20 @@ brew install chromedriver selenium-server
 /usr/bin/python3 -m pip install selenium
 ```
 
-## Run it!
+## F5 VPN HTML Login Automation
+
+I created this Python code to be able to automate F5 VPN Web login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
 
 ```
 /usr/bin/python3 F5VPN.py
+```
+
+## Axis Security Login Automation
+
+I created this Python code to be able to automate Axis Security login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
+
+```
+/usr/bin/python3 AxisSecurity.py
 ```
 
 ## Known issues
