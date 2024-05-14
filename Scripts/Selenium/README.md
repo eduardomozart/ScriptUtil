@@ -22,7 +22,7 @@ I created this Python code to be able to automate F5 VPN Web login through [Roya
 I created this Python code to be able to automate Axis Security login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
 
 ```
-/usr/bin/python3 AxisSecurity.py
+/usr/bin/python3 AxisSecurity-Inline.py
 ```
 
 ## Known issues
