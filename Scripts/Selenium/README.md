@@ -9,12 +9,12 @@ brew install chromedriver selenium-server
 /usr/bin/python3 -m pip install selenium
 ```
 
-## F5 VPN HTML Login Automation
+## Aruba Central Login Automation
 
-I created this Python code to be able to automate F5 VPN Web login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
+I created this Python code to be able to automate Aruba Central (HPE GreenLake) login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
 
 ```
-/usr/bin/python3 F5VPN.py
+/bin/bash ArubaCentral-Inline.sh
 ```
 
 ## Axis Security Login Automation
@@ -23,6 +23,14 @@ I created this Python code to be able to automate Axis Security login through [R
 
 ```
 /bin/bash AxisSecurity-Inline.sh
+```
+
+## F5 VPN HTML Login Automation
+
+I created this Python code to be able to automate F5 VPN Web login through [Royal TSX](https://www.royalapps.com/ts/mac/features) (Command Task).
+
+```
+/usr/bin/python3 F5VPN.py
 ```
 
 ## Troubleshooting
