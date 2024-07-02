@@ -16,7 +16,7 @@ define('OAUTH_CONF', './../../oauth.ini'); // keep outh.ini out of the web root!
 // sua execução quando essas variáveis estão definidas.
 // Você também precisa habilitar a opção "Detailed errors" em 'IIS Manager > Default Web Site > Error Pages' para que
 // as mensagens de erro do PHP sejam exibidas.
-define('OAUTH_DEBUG', true);
+define('OAUTH_DEBUG', false);
 
 if (!OAUTH_DEBUG) {
 	/**
