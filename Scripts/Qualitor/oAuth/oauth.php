@@ -72,7 +72,7 @@ if(array_key_exists($idp, $settings) && boolval($settings[$idp]["enabled"])) {
 			// ao realizar logoff, o Qualitor redireciona o usuário para a tela de login, que é interceptada para esse script.
 			$idpUri = $idpUri."&prompt=login";
 		} else {
-			// Substitua por '&prompt=login' para forçar a reautenticação do usuário oAuth ou '&prompt=none' para não exibir a tela de login (promptless).
+			// Substitua por '&prompt=login' para forçar a reautenticação do usuário oAuth ou '&prompt=none'/'&approval_prompt=auto' para não exibir a tela de login (promptless).
 			$idpUri = $idpUri."&prompt=select_account";
 		}
 	}
