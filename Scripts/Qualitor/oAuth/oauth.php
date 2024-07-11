@@ -77,7 +77,7 @@ if(array_key_exists($idp, $settings) && boolval($settings[$idp]["enabled"])) {
 	if($idp == "microsoft") {
 		$idpUri = $idpUri."&domain_hint=".$settings[$idp]['domainHint'];
 	} elseif ($idp == "google") {
-		$idpUri = $idpUri."&hd=".$settings[$idp]['domainHint']
+		$idpUri = $idpUri."&hd=".$settings[$idp]['domainHint'];
 	}
 } else {
 	echo "Provider '".$idp."' not enabled.";
@@ -281,6 +281,13 @@ if(isset($_GET['code']) && isset($_GET['state']) && !isset($_GET['error']))
 	session_write_close(); */
 }
 elseif (isset($_GET["error"])) {
+	if($_GET["error"] == "interaction_required" || $_GET["error"] == "login_required") {
+		$param = "prompt";
+		$idpUri = preg_replace('/(&|\?)'.preg_quote($param).'=[^&]*$/', '', $idpUri);
+		$idpUri = preg_replace('/(&|\?)'.preg_quote($param).'=[^&]*&/', '$1', $idpUri);
+		
+		header("Location: ".$idpUri."&prompt=select_account");
+	}
 	echo "Error received at the beginning of second stage.";
 }
 /* else
