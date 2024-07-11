@@ -65,16 +65,19 @@ if(isset($_REQUEST['state'])) {
 // Verifica se o IdP especificado existe e está habilitado no arquivo de configuração.
 if(array_key_exists($idp, $settings) && boolval($settings[$idp]["enabled"])) {
 	$idpUri = $settings[$idp]['endpointAuthorize'].'?state='.$idp.'&client_id='.$settings[$idp]['clientId'].'&response_type=code&scope='.$settings[$idp]['scope'].'&redirect_uri='.$settings['default']['redirectUri'];
+	if (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'logout.php') && !strstr($_SERVER['HTTP_REFERER'], '?')) {
+		// Adiciona '&prompt=select_account' ao final da URI do endpointAuthorize para forçar o login do usuário após ele realizar logoff no Qualitor, 
+		// caso contrário, ele entrará em loop e re-autenticará o usuário através de oAuth do Microsoft Entra (Azure) automaticamente já que,
+		// ao realizar logoff, o Qualitor redireciona o usuário para a tela de login, que é interceptada para esse script.
+		$idpUri = $idpUri."&prompt=select_account";
+	} else {
+		// Substitua por '&prompt=login' para forçar a reautenticação do usuário oAuth ou '&prompt=none'/'&approval_prompt=auto' para não exibir a tela de login (promptless).
+		$idpUri = $idpUri."&prompt=none";
+	}
 	if($idp == "microsoft") {
-		if (isset($_SERVER['HTTP_REFERER']) && strstr($_SERVER['HTTP_REFERER'], 'logout.php') && !strstr($_SERVER['HTTP_REFERER'], '?')) {
-			// Adiciona '&prompt=login' ao final da URI do endpointAuthorize para forçar o login do usuário após ele realizar logoff no Qualitor, 
-			// caso contrário, ele entrará em loop e re-autenticará o usuário através de oAuth do Microsoft Entra (Azure) automaticamente já que,
-			// ao realizar logoff, o Qualitor redireciona o usuário para a tela de login, que é interceptada para esse script.
-			$idpUri = $idpUri."&prompt=login";
-		} else {
-			// Substitua por '&prompt=login' para forçar a reautenticação do usuário oAuth ou '&prompt=none'/'&approval_prompt=auto' para não exibir a tela de login (promptless).
-			$idpUri = $idpUri."&prompt=select_account";
-		}
+		$idpUri = $idpUri."&domain_hint=".$settings[$idp]['domainHint'];
+	} elseif ($idp == "google") {
+		$idpUri = $idpUri."&hd=".$settings[$idp]['domainHint']
 	}
 } else {
 	echo "Provider '".$idp."' not enabled.";
