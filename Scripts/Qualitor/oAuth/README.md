@@ -4,6 +4,10 @@ Script PHP para integração oAuth através do WebService do Qualitor 8. Testado
 
 Instruções de uso e configuração do script podem ser encontradas aqui: [https://eduardomozartdeoliveira.wordpress.com/?p=11771](https://eduardomozartdeoliveira.wordpress.com/?p=11771)
 
+## ToDo
+
+1. Usar "Revoke" para revogar apenas o token de acesso do Qualitor ao invés de "Logout" que causa o logoff da conta oAuth em todos os aplicativos.
+
 ## Referências 
 
 1. [AndrewRose/oauth.php](https://github.com/AndrewRose/oauth.php). 
