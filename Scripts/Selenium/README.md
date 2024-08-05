@@ -7,6 +7,7 @@ You may need to install the following dependencies to run it on macOS:
 ```
 brew install chromedriver selenium-server
 /usr/bin/python3 -m pip install selenium
+xattr -d com.apple.quarantine /usr/local/bin/chromedriver
 ```
 
 ## Aruba Central Login Automation
