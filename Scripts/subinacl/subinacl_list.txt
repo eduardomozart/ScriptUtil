@@ -1,0 +1,27 @@
+; ====================================================================================
+; SUBINACL AUTO 1.5 - EDUARDO OLIVEIRA (HTTPS://EDUARDOMOZARTDEOLIVEIRA.WORDPRESS.COM)
+; NOTES FOR NETWORK ENVIRONMENTS
+; ====================================================================================
+;
+; You can change permissions to a specific user using this TXT file.
+;
+; Example:
+;
+; S-1-5-32-544
+; SERVER\SERVER001
+;
+; Use ID if you are changing permissions to a default Windows user or group.
+; 'Administrators' is different than 'Administradores', Administrators default group in
+; Brazilian Windows.
+;
+; You can read a list of IDs in the link below:
+; http://support.microsoft.com/kb/243330/en-us
+;	
+;	SYSTEM 	       = S-1-5-18
+; 	Administrators = S-1-5-32-544
+; 	
+; =====================================================================================
+; DO NOT USE SPACE BELOW, ONLY ENTER TO SEPARATE GROUPS AND NAMES. USE WITHOUT ;
+; =====================================================================================
+S-1-5-18
+S-1-5-32-544
