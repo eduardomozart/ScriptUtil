@@ -166,13 +166,22 @@ Private Function EnableTLS12()
 	If (CheckOSType() = "x64") Then
 		RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Internet Settings\WinHttp\DefaultSecureProtocols", 2560, "REG_DWORD"
 	End If
+
+	' A value of 1 causes your app to allow the operating system to choose the protocol.
+	' A value of 0 causes your app to use protocols picked by the .NET Framework.
+	' https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/reference-connect-tls-enforcement
+	RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\SystemDefaultTlsVersions", 1, "REG_DWORD"
+	If (CheckOSType() = "x64") Then
+		RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\SystemDefaultTlsVersions", 1, "REG_DWORD"
+	End If
 	
 	' Block RC4 in .NET TLS
 	' https://support.laserfiche.com/kb/1013919/configuration-information-for-tls-1-2
-	' RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\SchUseStrongCrypto", 1, "REG_DWORD"
-	' If (CheckOSType() = "x64") Then
-	'	RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\SchUseStrongCrypto", 1, "REG_DWORD"
-	' End If
+	' https://learn.microsoft.com/en-us/entra/identity/hybrid/connect/reference-connect-tls-enforcement
+	RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\.NETFramework\v4.0.30319\SchUseStrongCrypto", 1, "REG_DWORD"
+	If (CheckOSType() = "x64") Then
+		RegWrite "HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\.NETFramework\v4.0.30319\SchUseStrongCrypto", 1, "REG_DWORD"
+	End If
 	
 	If boolIsWindows60SP2 Then
 		' By default, after installing KB4056564, TLS 1.1/1.2 options are NOT shown into Windows Internet Explorer.
