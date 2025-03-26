@@ -1,7 +1,7 @@
 '-----------------------------------------------------------------------------
 ' Enable TLS 1.2
 '
-' This script will enable TLS 1.0/1.1/1.2 and disable SSL 2.0/3.0 for Windows Vista/Server 2008 SP2 and Windows 7/Server 2008 R2 SP1.
+' This script will enable TLS 1.0/1.1/1.2 and disable SSL 2.0/3.0 for Windows Vista/Server 2008 SP2, Windows 7/Server 2008 R2 SP1 and Windows 8/Server 2012/R2.
 '
 ' Version:
 '
