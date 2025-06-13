@@ -13,5 +13,6 @@ if not '%~1' == '' (
 
 :: Actual work
 pushd "%~dp0"
-powershell -ExecutionPolicy Bypass -File "ClearPassOnGuardInstall.ps1"
+powershell.exe -NoProfile -Command "Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; & 'ClearPassOnGuardInstall.ps1'"
+REM powershell -ExecutionPolicy Bypass -File "ClearPassOnGuardInstall.ps1"
 popd
