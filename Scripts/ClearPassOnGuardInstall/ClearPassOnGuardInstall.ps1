@@ -10,26 +10,26 @@ function Get-MsiVersion {
     param (
         [string]$msiPath
     )
-	
-	if (-not (Test-Path $msiPath)) {
+
+    if (-not (Test-Path $msiPath)) {
         Write-Warning "Arquivo MSI não encontrado em: $msiPath"
         return $null
     }
-	
-	$parentPath = (Resolve-Path -Path (Split-Path -Path $msiPath)).Path
-	$fileName   = Split-Path -Path $msiPath -Leaf
 
-	$shell = New-Object -COMObject Shell.Application
-	$shellFolder = $Shell.NameSpace($parentPath)
-	$shellFile   = $ShellFolder.ParseName($fileName)
+    $parentPath = (Resolve-Path -Path (Split-Path -Path $msiPath)).Path
+    $fileName   = Split-Path -Path $msiPath -Leaf
+
+    $shell = New-Object -COMObject Shell.Application
+    $shellFolder = $Shell.NameSpace($parentPath)
+    $shellFile   = $ShellFolder.ParseName($fileName)
 	
-	if ($shellFolder.GetDetailsOf($shellFile,22) -match '(\d+\.\d+\.\d+\.\d+)') {
-		$version = $matches[1]
-	} else {
-		Write-Warning "No version found"
-		return $null
-	}
-	
+    if ($shellFolder.GetDetailsOf($shellFile,22) -match '(\d+\.\d+\.\d+\.\d+)') {
+        $version = $matches[1]
+    } else {
+        Write-Warning "No version found"
+        return $null
+    }
+
     return $version
 }
 
