@@ -62,19 +62,33 @@ Write-Host "Versão disponível: $newVersion"
 if ([version]$newVersion -gt [version]$installedVersion) {
     Write-Host "`n>>> Nova versão detectada. Iniciando instalação..."
 	
-	$tempDir = Join-Path $env:TEMP "ClearPassOnGuardInstall"
-	New-Item -Path $tempDir -ItemType Directory -Force | Out-Null
+    $tempDir = Join-Path $env:TEMP "ClearPassOnGuardInstall"
+    New-Item -Path $tempDir -ItemType Directory -Force | Out-Null
 
-	$basenameMsi = Split-Path -Path $networkMSIPath -Leaf
-	$basenameMst = Split-Path -Path $transformFile -Leaf
+    $basenameMsi = Split-Path -Path $networkMSIPath -Leaf
+    $basenameMst = Split-Path -Path $transformFile -Leaf
 
-	$tempMsi = Join-Path $tempDir $basenameMsi
-	$tempMst = Join-Path $tempDir $basenameMst
+    $tempMsi = Join-Path $tempDir $basenameMsi
+    $tempMst = Join-Path $tempDir $basenameMst
 
-	Copy-Item -Path $networkMSIPath -Destination $tempMsi -Force
-	Copy-Item -Path $transformFile -Destination $tempMst -Force
-	Unblock-File -Path $tempMsi -ErrorAction SilentlyContinue
-	Unblock-File -Path $tempMst -ErrorAction SilentlyContinue
+    Copy-Item -Path $networkMSIPath -Destination $tempMsi -Force
+    Copy-Item -Path $transformFile -Destination $tempMst -Force
+    Unblock-File -Path $tempMsi -ErrorAction SilentlyContinue
+    Unblock-File -Path $tempMst -ErrorAction SilentlyContinue
+
+    $serviceName = "ClearPass Agent Controller"
+
+    if (Get-Service -Name $serviceName -ErrorAction SilentlyContinue) {
+        Stop-Service -Name $serviceName -Force
+        Write-Host "Serviço '$serviceName' foi finalizado com êxito."
+    }
+
+    $processName = "clearpassonguard"
+    
+    if (Get-Process -Name "clearpassonguard" -ErrorAction SilentlyContinue) {
+        Stop-Service -Name $serviceName -Force
+        Write-Host "Processo '$serviceName' foi finalizado."
+    }
 
     $arguments = @(
         "/i `"$tempMsi`"",
