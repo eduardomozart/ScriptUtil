@@ -34,3 +34,7 @@ You can change the value of some variables in the script to suit your environmen
 By default, this script records it's operation in the ``%TEMP%\EnableTLS12.log`` and ``%TEMP%\EnableTLS12-install_msu.log`` files (e.g. ``C:\Users\Administrator\AppData\Local\Temp``).
 
 Please attach these files when opening an Issue on GitHub to make it possible to identify the possible cause of your problem.
+
+## Alternatives
+
+You can also install the KB update for your operating system manually and apply [Microsoft Easy Fix 51044](https://suporte.asnet.pt/pt/downloads/article/microsoft-fix-upgrade-win-10) to enable TLS 1.1/1.2 on your system.
